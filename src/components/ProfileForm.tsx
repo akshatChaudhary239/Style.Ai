@@ -149,6 +149,39 @@ export function ProfileForm() {
           ? "Your style & fit profile has been saved!" 
           : "Your changes have been saved!",
       });
+
+    // 🔥 Call your custom backend AI engine
+    const selectedClothingType = "casual";
+    const selectedBudget = "1000-2000";
+
+    const aiResponse = await fetch("http://localhost:8000/ai/recommend", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        height_cm: input.height_cm,
+        weight_kg: input.weight_kg,
+        body_type: input.body_type,
+        skin_tone: input.skin_tone,
+        clothing_type: selectedClothingType,
+        budget: selectedBudget,
+      }),
+    });
+
+    const aiData = await aiResponse.json();
+    navigate("/recommendation", { 
+  state: aiData.recommendation 
+    });
+
+    // (Optional)
+    // Show a toast with AI confirmation
+    toast({
+      title: "AI Processing Complete",
+      description: "Your style recommendations are being prepared!",
+    });
+
+
     } catch (error) {
       toast({
         title: "Error",
