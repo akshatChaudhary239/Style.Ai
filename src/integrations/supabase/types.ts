@@ -24,6 +24,8 @@ export type Database = {
           updated_at: string
           user_id: string | null
           weight_kg: number
+          roles: string[] | null
+          active_role: string | null
         }
         Insert: {
           body_type: string
@@ -44,15 +46,51 @@ export type Database = {
           updated_at?: string
           user_id?: string | null
           weight_kg?: number
+          roles: string[] | null
+          active_role: string | null
         }
         Relationships: []
       }
+      seller_profile: {
+  Row: {
+    id: string
+    store_name: string
+    business_type: string | null
+    location: string | null
+    total_credits: number
+    created_at: string
+  }
+  Insert: {
+    id: string
+    store_name: string
+    business_type?: string | null
+    location?: string | null
+    total_credits?: number
+    created_at?: string
+  }
+  Update: {
+    store_name?: string
+    business_type?: string | null
+    location?: string | null
+    total_credits?: number
+    created_at?: string
+  }
+  Relationships: []
+}
+
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      become_seller: {
+        Args: {
+          p_store_name: string
+          p_business_type: string
+          p_location: string
+        }
+        Returns: void
+      }
     }
     Enums: {
       [_ in never]: never
