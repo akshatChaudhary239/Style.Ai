@@ -12,6 +12,7 @@ import BecomeSeller from "./pages/BecomeSeller";
 import ChooseRole from "./pages/ChooseRole";
 import RoleGate from "./pages/RoleGate";
 import SellerDashboard from "./pages/seller/SellerDashboard";
+import HomeGate from "./pages/HomeGate";
 
 const queryClient = new QueryClient();
 
@@ -23,8 +24,9 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
+             <Route path="/" element={<HomeGate />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/" element={<RoleGate />} />
+            <Route path="/app" element={<RoleGate />} />
             <Route path="/index" element={<Index />} />
             <Route path="/seller/SellerDashboard" element={<SellerDashboard />} />
             <Route path="/recommendation" element={<Recommendation />} />
