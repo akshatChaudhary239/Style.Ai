@@ -14,74 +14,194 @@ export type Database = {
   }
   public: {
     Tables: {
-      user_profiles: {
+      clothes: {
         Row: {
-          body_type: string
-          created_at: string
-          height_cm: number
+          category: string
+          color: string | null
+          created_at: string | null
+          description: string | null
+          gender: string
           id: string
-          skin_tone: string
-          updated_at: string
-          user_id: string | null
-          weight_kg: number
-          roles: string[] | null
-          active_role: string | null
+          image_url: string
+          is_active: boolean | null
+          price: number
+          seller_id: string | null
+          size: string | null
         }
         Insert: {
-          body_type: string
-          created_at?: string
-          height_cm: number
+          category: string
+          color?: string | null
+          created_at?: string | null
+          description?: string | null
+          gender: string
           id?: string
-          skin_tone: string
-          updated_at?: string
-          user_id?: string | null
-          weight_kg: number
+          image_url: string
+          is_active?: boolean | null
+          price: number
+          seller_id?: string | null
+          size?: string | null
         }
         Update: {
-          body_type?: string
-          created_at?: string
-          height_cm?: number
+          category?: string
+          color?: string | null
+          created_at?: string | null
+          description?: string | null
+          gender?: string
           id?: string
-          skin_tone?: string
-          updated_at?: string
-          user_id?: string | null
-          weight_kg?: number
-          roles: string[] | null
-          active_role: string | null
+          image_url?: string
+          is_active?: boolean | null
+          price?: number
+          seller_id?: string | null
+          size?: string | null
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          category: string | null
+          color: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          image_urls: string[]
+          name: string
+          seller_id: string
+          size: string | null
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          color?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_urls?: string[]
+          name: string
+          seller_id: string
+          size?: string | null
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          color?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_urls?: string[]
+          name?: string
+          seller_id?: string
+          size?: string | null
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "seller_profile"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      seller_credit_logs: {
+        Row: {
+          change: number
+          created_at: string | null
+          id: string
+          reason: string
+          reference_id: string | null
+          seller_id: string | null
+        }
+        Insert: {
+          change: number
+          created_at?: string | null
+          id?: string
+          reason: string
+          reference_id?: string | null
+          seller_id?: string | null
+        }
+        Update: {
+          change?: number
+          created_at?: string | null
+          id?: string
+          reason?: string
+          reference_id?: string | null
+          seller_id?: string | null
         }
         Relationships: []
       }
       seller_profile: {
-  Row: {
-    id: string
-    store_name: string
-    business_type: string | null
-    location: string | null
-    total_slots: number
-    used_slots: number
-    created_at: string
-  }
-  Insert: {
-    id: string
-    store_name: string
-    business_type?: string | null
-    location?: string | null
-    total_slots?: number
-    used_slots?: number
-    created_at?: string
-  }
-  Update: {
-    store_name?: string
-    business_type?: string | null
-    location?: string | null
-    total_slots?: number
-    used_slots?: number
-    created_at?: string
-  }
-  Relationships: []
-}
-
-
+        Row: {
+          business_type: string | null
+          created_at: string | null
+          id: string
+          location: string | null
+          store_name: string
+          total_credits: number
+          total_slots: number
+          used_slots: number
+        }
+        Insert: {
+          business_type?: string | null
+          created_at?: string | null
+          id: string
+          location?: string | null
+          store_name: string
+          total_credits?: number
+          total_slots?: number
+          used_slots?: number
+        }
+        Update: {
+          business_type?: string | null
+          created_at?: string | null
+          id?: string
+          location?: string | null
+          store_name?: string
+          total_credits?: number
+          total_slots?: number
+          used_slots?: number
+        }
+        Relationships: []
+      }
+      user_profiles: {
+        Row: {
+          active_role: string | null
+          body_type: string | null
+          created_at: string | null
+          height_cm: number | null
+          id: string
+          roles: string[]
+          skin_tone: string | null
+          updated_at: string | null
+          weight_kg: number | null
+        }
+        Insert: {
+          active_role?: string | null
+          body_type?: string | null
+          created_at?: string | null
+          height_cm?: number | null
+          id: string
+          roles?: string[]
+          skin_tone?: string | null
+          updated_at?: string | null
+          weight_kg?: number | null
+        }
+        Update: {
+          active_role?: string | null
+          body_type?: string | null
+          created_at?: string | null
+          height_cm?: number | null
+          id?: string
+          roles?: string[]
+          skin_tone?: string | null
+          updated_at?: string | null
+          weight_kg?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -89,11 +209,11 @@ export type Database = {
     Functions: {
       become_seller: {
         Args: {
-          p_store_name: string
           p_business_type: string
           p_location: string
+          p_store_name: string
         }
-        Returns: void
+        Returns: undefined
       }
     }
     Enums: {

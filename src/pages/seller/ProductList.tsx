@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { Database } from "@/integrations/supabase/types";
 
-type Product = {
-  id: string;
-  name: string;
-  category: string | null;
-  status: "draft" | "active";
-  image_urls: string[];
-};
+type Product =
+  Database["public"]["Tables"]["products"]["Row"];
 
-export default function ProductList() {
+export default function ProductList({
+  onClose,
+}: {
+  onClose: () => void;
+}) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -28,113 +28,81 @@ export default function ProductList() {
 
     const { data, error } = await supabase
       .from("products")
-      .select("id, name, category, status, image_urls")
+      .select("*")
       .eq("seller_id", user.id)
       .order("created_at", { ascending: false });
 
-    if (error) {
-      console.error(error);
-    } else {
-      setProducts(data || []);
+    if (!error && data) {
+      setProducts(
+        data.map((p) => ({
+          ...p,
+          status: p.status as "draft" | "active",
+        }))
+      );
     }
 
     setLoading(false);
   }
 
-  async function toggleStatus(product: Product) {
-    const newStatus = product.status === "draft" ? "active" : "draft";
-
-    const { error } = await supabase
-      .from("products")
-      .update({ status: newStatus })
-      .eq("id", product.id);
-
-    if (error) {
-      alert(error.message);
-    } else {
-      fetchProducts(); // re-sync slot logic
-    }
-  }
-
-  async function deleteProduct(id: string) {
-    const confirmed = confirm("Delete this product?");
-    if (!confirmed) return;
-
-    const { error } = await supabase
-      .from("products")
-      .delete()
-      .eq("id", id);
-
-    if (error) {
-      alert(error.message);
-    } else {
-      fetchProducts();
-    }
-  }
-
   if (loading) return <p>Loading products...</p>;
 
-  if (products.length === 0) {
-    return <p>No products yet. Create one.</p>;
-  }
-
   return (
-    <div className="space-y-4">
-      {products.map((product) => (
-        <div
-          key={product.id}
-          className="flex items-center gap-4 border p-3 rounded"
-        >
-          {/* Image */}
-          <div className="w-20 h-20 bg-gray-100 rounded overflow-hidden">
-            {product.image_urls?.[0] ? (
-              <img
-                src={product.image_urls[0]}
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className="flex items-center justify-center h-full text-xs text-gray-400">
-                No Image
-              </div>
-            )}
-          </div>
+    <div>
+      <h2 className="text-xl font-semibold mb-6">Your Products</h2>
 
-          {/* Info */}
-          <div className="flex-1">
-            <h3 className="font-semibold">{product.name}</h3>
-            <p className="text-sm text-gray-500">
-              {product.category || "No category"}
-            </p>
-            <span
-              className={`text-xs font-medium ${
-                product.status === "active"
-                  ? "text-green-600"
-                  : "text-yellow-600"
-              }`}
-            >
-              {product.status.toUpperCase()}
-            </span>
-          </div>
+{products.length === 0 && (
+  <div className="flex flex-col items-center justify-center py-16 text-center">
+    <p className="text-lg font-medium mb-2">
+      No products yet
+    </p>
+    <p className="text-sm text-muted-foreground mb-6">
+      Start by uploading your first product
+    </p>
 
-          {/* Actions */}
-          <div className="flex gap-2">
-            <button
-              onClick={() => toggleStatus(product)}
-              className="text-sm px-3 py-1 border rounded"
-            >
-              {product.status === "draft" ? "Publish" : "Unpublish"}
-            </button>
+    <button
+      className="px-5 py-2 bg-primary text-primary-foreground rounded-lg"
+      onClick={() => {
+        // next step: switch to upload panel
+        alert("Upload panel coming next");
+      }}
+    >
+      + Upload Product
+    </button>
+  </div>
+)}
 
-            <button
-              onClick={() => deleteProduct(product.id)}
-              className="text-sm px-3 py-1 border text-red-600 rounded"
-            >
-              Delete
-            </button>
+
+      <div className="space-y-4">
+        {products.map((product) => (
+          <div
+            key={product.id}
+            className="flex items-center gap-4 border p-3 rounded-lg"
+          >
+            <div className="w-20 h-20 bg-muted rounded overflow-hidden">
+              {product.image_urls?.[0] ? (
+                <img
+                  src={product.image_urls[0]}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
+                  No Image
+                </div>
+              )}
+            </div>
+
+            <div className="flex-1">
+              <p className="font-medium">{product.name}</p>
+              <p className="text-sm text-muted-foreground">
+                {product.category || "No category"}
+              </p>
+              <span className="text-xs">
+                {product.status.toUpperCase()}
+              </span>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
