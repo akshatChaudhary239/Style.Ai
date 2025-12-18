@@ -57,7 +57,8 @@ export type Database = {
     store_name: string
     business_type: string | null
     location: string | null
-    total_credits: number
+    total_slots: number
+    used_slots: number
     created_at: string
   }
   Insert: {
@@ -65,18 +66,21 @@ export type Database = {
     store_name: string
     business_type?: string | null
     location?: string | null
-    total_credits?: number
+    total_slots?: number
+    used_slots?: number
     created_at?: string
   }
   Update: {
     store_name?: string
     business_type?: string | null
     location?: string | null
-    total_credits?: number
+    total_slots?: number
+    used_slots?: number
     created_at?: string
   }
   Relationships: []
 }
+
 
     }
     Views: {
