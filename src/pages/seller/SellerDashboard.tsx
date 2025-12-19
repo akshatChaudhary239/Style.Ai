@@ -3,8 +3,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import ProductList from "./ProductList";
+import ProductEditor from "./ProductEditor";
 
-type Panel = "none" | "products";
+
+type Panel = "none" | "products" | "create";
+
 
 export default function SellerDashboard() {
   const navigate = useNavigate();
@@ -117,12 +120,13 @@ export default function SellerDashboard() {
         </div>
 
         {/* Upload CTA */}
-        <button
-          onClick={() => setActivePanel("products")}
-          className="px-4 py-2 bg-primary text-primary-foreground rounded-lg"
-        >
-          + Upload / Manage Products
-        </button>
+<button
+  className="px-4 py-2 bg-primary text-primary-foreground rounded-lg"
+  onClick={() => setActivePanel("create")}
+>
+  + Upload Product
+</button>
+
         </main>
         </div>
         {/* Overlay Panel */}
@@ -137,8 +141,19 @@ export default function SellerDashboard() {
               </button>
 
               {activePanel === "products" && (
-                <ProductList onClose={() => setActivePanel("none")} />
+                <ProductList
+  onClose={() => setActivePanel("none")}
+  onCreate={() => setActivePanel("create")}
+/>
               )}
+                    {activePanel === "create" && (
+        <ProductEditor
+          onClose={() => setActivePanel("none")}
+          onCreated={() => {
+            // optional: refresh product list later
+          }}
+        />
+      )}
             </div>
           </div>
         )}
