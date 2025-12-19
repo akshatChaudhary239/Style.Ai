@@ -4,13 +4,22 @@ import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import ProductList from "./ProductList";
 import ProductEditor from "./ProductEditor";
+import { Database } from "@/integrations/supabase/types";
+
+type Product =
+  Database["public"]["Tables"]["products"]["Row"];
 
 
-type Panel = "none" | "products" | "create";
+
+type Panel = "none" | "products" | "create" | "edit";
+
 
 
 export default function SellerDashboard() {
   const navigate = useNavigate();
+
+const [selectedProduct, setSelectedProduct] =
+  useState<Product | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [storeName, setStoreName] = useState<string | null>(null);
@@ -70,6 +79,25 @@ export default function SellerDashboard() {
       </div>
     );
   }
+  async function fetchSellerSlots() {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return;
+
+  const { data } = await supabase
+    .from("seller_profile")
+    .select("total_slots, used_slots")
+    .eq("id", user.id)
+    .single();
+
+  if (data) {
+    setTotalSlots(data.total_slots);
+    setUsedSlots(data.used_slots);
+  }
+}
+
 
   return (
       <>
@@ -141,19 +169,27 @@ export default function SellerDashboard() {
               </button>
 
               {activePanel === "products" && (
-                <ProductList
-  onClose={() => setActivePanel("none")}
-  onCreate={() => setActivePanel("create")}
-/>
+<ProductList
+                onCreate={() => setActivePanel("create")}
+                onEdit={(product) => {
+                  setSelectedProduct(product);
+                  setActivePanel("edit");
+                } }
+                onStatusChange={fetchSellerSlots} onClose={function (): void {
+                  throw new Error("Function not implemented.");
+                } }/>
+
+
               )}
-                    {activePanel === "create" && (
-        <ProductEditor
-          onClose={() => setActivePanel("none")}
-          onCreated={() => {
-            // optional: refresh product list later
-          }}
-        />
-      )}
+{activePanel === "edit" && selectedProduct && (
+  <ProductEditor
+    mode="edit"
+    product={selectedProduct}
+    onClose={() => setActivePanel("none")}
+    onCreated={fetchSellerSlots}
+  />
+)}
+
             </div>
           </div>
         )}

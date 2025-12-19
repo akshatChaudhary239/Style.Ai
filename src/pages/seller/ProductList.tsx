@@ -8,10 +8,34 @@ type Product =
 export default function ProductList({
   onClose,
   onCreate,
+  onEdit,
+  onStatusChange,
 }: {
   onClose: () => void;
   onCreate: () => void;
+  onEdit: (product: Product) => void;
+  onStatusChange: () => void;
 }) {
+
+
+
+  async function toggleStatus(product: Product) {
+  const newStatus = product.status === "draft" ? "active" : "draft";
+
+  const { error } = await supabase
+    .from("products")
+    .update({ status: newStatus })
+    .eq("id", product.id);
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  fetchProducts();      // refresh product list
+  onStatusChange();     // refresh slot counts
+}
+
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -85,33 +109,57 @@ export default function ProductList({
 
       <div className="space-y-4">
         {products.map((product) => (
-          <div
-            key={product.id}
-            className="flex items-center gap-4 border p-3 rounded-lg"
-          >
-            <div className="w-20 h-20 bg-muted rounded overflow-hidden">
-              {product.image_urls?.[0] ? (
-                <img
-                  src={product.image_urls[0]}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
-                  No Image
-                </div>
-              )}
-            </div>
+<div
+  key={product.id}
+  className="flex items-center gap-4 border p-3 rounded-lg"
+>
+  {/* Image */}
+  <div className="w-20 h-20 bg-muted rounded overflow-hidden">
+    {product.image_urls?.[0] ? (
+      <img
+        src={product.image_urls[0]}
+        className="w-full h-full object-cover"
+      />
+    ) : (
+      <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
+        No Image
+      </div>
+    )}
+  </div>
 
-            <div className="flex-1">
-              <p className="font-medium">{product.name}</p>
-              <p className="text-sm text-muted-foreground">
-                {product.category || "No category"}
-              </p>
-              <span className="text-xs">
-                {product.status.toUpperCase()}
-              </span>
-            </div>
-          </div>
+  {/* Info */}
+  <div className="flex-1">
+    <p className="font-medium">{product.name}</p>
+    <p className="text-sm text-muted-foreground">
+      {product.category || "No category"}
+    </p>
+    <span className="text-xs">
+      {product.status.toUpperCase()}
+    </span>
+  </div>
+
+  {/* ACTION BUTTONS ← THIS IS WHAT WAS MISSING */}
+  <div className="flex gap-2">
+    <button
+      onClick={() => toggleStatus(product)}
+      className={`px-3 py-1 text-sm rounded ${
+        product.status === "draft"
+          ? "bg-green-600 text-white"
+          : "bg-yellow-500 text-white"
+      }`}
+    >
+      {product.status === "draft" ? "Publish" : "Unpublish"}
+    </button>
+  </div>
+  <button
+  onClick={() => onEdit(product)}
+  className="px-3 py-1 text-sm border rounded"
+>
+  Edit
+</button>
+
+</div>
+
         ))}
       </div>
     </div>

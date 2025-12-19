@@ -1,12 +1,22 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { Database } from "@/integrations/supabase/types";
+
 
 const MAX_IMAGES = 5;
+type Product =
+  Database["public"]["Tables"]["products"]["Row"];
+
+type Mode = "create" | "edit";
 
 export default function ProductEditor({
+  mode,
+  product,
   onClose,
   onCreated,
 }: {
+  mode: Mode;
+  product?: Product;
   onClose: () => void;
   onCreated: () => void;
 }) {
@@ -21,19 +31,34 @@ export default function ProductEditor({
 
   const [files, setFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
+  useEffect(() => {
+  if (mode === "edit" && product) {
+    setName(product.name);
+    setCategory(product.category || "");
+    setColor(product.color || "");
+    setSize(product.size || "");
+    setProductId(product.id);
 
-  async function createProduct() {
-    if (!name.trim()) {
-      alert("Product name is required");
-      return;
-    }
+    // In edit mode, we skip image step for now
+    setStep("details");
+  }
+}, [mode, product]);
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
 
-    if (!user) return;
+async function saveProduct() {
+  if (!name.trim()) {
+    alert("Product name is required");
+    return;
+  }
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return;
+
+  // 🔹 CREATE MODE (unchanged logic)
+  if (mode === "create") {
     const { data, error } = await supabase
       .from("products")
       .insert({
@@ -55,7 +80,31 @@ export default function ProductEditor({
 
     setProductId(data.id);
     setStep("images");
+    return;
   }
+
+  // 🔹 EDIT MODE (SAFE UPDATE)
+  if (mode === "edit" && productId) {
+    const { error } = await supabase
+      .from("products")
+      .update({
+        name,
+        category: category || null,
+        color: color || null,
+        size: size || null,
+      })
+      .eq("id", productId);
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    onCreated(); // refresh list
+    onClose();
+  }
+}
+
 
   async function uploadImages() {
     if (!productId) return;
@@ -152,13 +201,13 @@ export default function ProductEditor({
               <button onClick={onClose} className="px-4 py-2 border rounded">
                 Cancel
               </button>
+<button
+  onClick={saveProduct}
+  className="px-4 py-2 bg-primary text-primary-foreground rounded"
+>
+  {mode === "create" ? "Next" : "Save Changes"}
+</button>
 
-              <button
-                onClick={createProduct}
-                className="px-4 py-2 bg-primary text-primary-foreground rounded"
-              >
-                Next
-              </button>
             </div>
           </div>
         </>
