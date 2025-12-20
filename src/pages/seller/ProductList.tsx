@@ -35,6 +35,27 @@ export default function ProductList({
   fetchProducts();      // refresh product list
   onStatusChange();     // refresh slot counts
 }
+async function deleteProduct(product: Product) {
+  const confirmDelete = window.confirm(
+    `Delete "${product.name}"? This action cannot be undone.`
+  );
+
+  if (!confirmDelete) return;
+
+  const { error } = await supabase
+    .from("products")
+    .delete()
+    .eq("id", product.id);
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  fetchProducts();   // refresh list
+  onStatusChange();  // refresh slots (important if active)
+}
+
 
 
   const [products, setProducts] = useState<Product[]>([]);
@@ -139,24 +160,33 @@ export default function ProductList({
   </div>
 
   {/* ACTION BUTTONS ← THIS IS WHAT WAS MISSING */}
-  <div className="flex gap-2">
-    <button
-      onClick={() => toggleStatus(product)}
-      className={`px-3 py-1 text-sm rounded ${
-        product.status === "draft"
-          ? "bg-green-600 text-white"
-          : "bg-yellow-500 text-white"
-      }`}
-    >
-      {product.status === "draft" ? "Publish" : "Unpublish"}
-    </button>
-  </div>
+<div className="flex gap-2">
   <button
-  onClick={() => onEdit(product)}
-  className="px-3 py-1 text-sm border rounded"
->
-  Edit
-</button>
+    onClick={() => onEdit(product)}
+    className="px-3 py-1 text-sm border rounded"
+  >
+    Edit
+  </button>
+
+  <button
+    onClick={() => toggleStatus(product)}
+    className={`px-3 py-1 text-sm rounded ${
+      product.status === "draft"
+        ? "bg-green-600 text-white"
+        : "bg-yellow-500 text-white"
+    }`}
+  >
+    {product.status === "draft" ? "Publish" : "Unpublish"}
+  </button>
+
+  <button
+    onClick={() => deleteProduct(product)}
+    className="px-3 py-1 text-sm bg-red-600 text-white rounded"
+  >
+    Delete
+  </button>
+</div>
+
 
 </div>
 
