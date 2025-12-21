@@ -7,6 +7,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers.ai import router as ai_router
 app = FastAPI(title="Custom AI Backend")
+from app.routers.payments import router as payments_router
+app.include_router(payments_router)
+
 
 # Allow frontend to call the backend
 app.add_middleware(
