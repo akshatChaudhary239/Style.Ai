@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from services.style_engine import recommend_outfit
+from app.services.style_engine import recommend_outfit
 
 router = APIRouter()
 
