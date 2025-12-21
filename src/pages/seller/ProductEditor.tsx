@@ -21,6 +21,9 @@ export default function ProductEditor({
   onCreated: () => void;
 }) {
   const [step, setStep] = useState<"details" | "images">("details");
+  const [existingImages, setExistingImages] = useState<string[]>([]);
+  const [newFiles, setNewFiles] = useState<File[]>([]);
+
 
   const [productId, setProductId] = useState<string | null>(null);
 
@@ -29,7 +32,7 @@ export default function ProductEditor({
   const [color, setColor] = useState("");
   const [size, setSize] = useState("");
 
-  const [files, setFiles] = useState<File[]>([]);
+
   const [uploading, setUploading] = useState(false);
   useEffect(() => {
   if (mode === "edit" && product) {
@@ -38,8 +41,10 @@ export default function ProductEditor({
     setColor(product.color || "");
     setSize(product.size || "");
     setProductId(product.id);
+    setExistingImages(product.image_urls || []);
 
-    // In edit mode, we skip image step for now
+
+   
     setStep("details");
   }
 }, [mode, product]);
@@ -106,59 +111,52 @@ async function saveProduct() {
 }
 
 
-  async function uploadImages() {
-    if (!productId) return;
-    if (files.length === 0) {
-      onCreated();
-      onClose();
+async function uploadImages() {
+  if (!productId) return;
+
+  setUploading(true);
+
+  const uploadedUrls: string[] = [];
+
+  for (const file of newFiles) {
+    const fileExt = file.name.split(".").pop();
+    const filePath = `${productId}/${crypto.randomUUID()}.${fileExt}`;
+
+    const { error } = await supabase.storage
+      .from("product-images")
+      .upload(filePath, file);
+
+    if (error) {
+      alert(error.message);
+      setUploading(false);
       return;
     }
 
-    if (files.length > MAX_IMAGES) {
-      alert("Maximum 5 images allowed");
-      return;
-    }
+    const { data } = supabase.storage
+      .from("product-images")
+      .getPublicUrl(filePath);
 
-    setUploading(true);
-
-    const uploadedUrls: string[] = [];
-
-    for (const file of files) {
-      const fileExt = file.name.split(".").pop();
-      const filePath = `${productId}/${crypto.randomUUID()}.${fileExt}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from("product-images")
-        .upload(filePath, file);
-
-      if (uploadError) {
-        alert(uploadError.message);
-        setUploading(false);
-        return;
-      }
-
-      const { data } = supabase.storage
-        .from("product-images")
-        .getPublicUrl(filePath);
-
-      uploadedUrls.push(data.publicUrl);
-    }
-
-    const { error: updateError } = await supabase
-      .from("products")
-      .update({ image_urls: uploadedUrls })
-      .eq("id", productId);
-
-    setUploading(false);
-
-    if (updateError) {
-      alert(updateError.message);
-      return;
-    }
-
-    onCreated();
-    onClose();
+    uploadedUrls.push(data.publicUrl);
   }
+
+  const finalImages = [...existingImages, ...uploadedUrls];
+
+  const { error: updateError } = await supabase
+    .from("products")
+    .update({ image_urls: finalImages })
+    .eq("id", productId);
+
+  setUploading(false);
+
+  if (updateError) {
+    alert(updateError.message);
+    return;
+  }
+
+  onCreated();
+  onClose();
+}
+
 
   return (
     <div>
@@ -197,36 +195,79 @@ async function saveProduct() {
               className="w-full border rounded px-3 py-2"
             />
 
-            <div className="flex justify-end gap-3 pt-4">
-              <button onClick={onClose} className="px-4 py-2 border rounded">
-                Cancel
-              </button>
-<button
-  onClick={saveProduct}
-  className="px-4 py-2 bg-primary text-primary-foreground rounded"
->
-  {mode === "create" ? "Next" : "Save Changes"}
-</button>
+<div className="flex justify-end gap-3 pt-4">
+  <button onClick={onClose} className="px-4 py-2 border rounded">
+    Cancel
+  </button>
 
-            </div>
+  {mode === "edit" && (
+    <button
+      onClick={() => setStep("images")}
+      className="px-4 py-2 border rounded"
+    >
+      Edit Images
+    </button>
+  )}
+
+  <button
+    onClick={saveProduct}
+    className="px-4 py-2 bg-primary text-primary-foreground rounded"
+  >
+    {mode === "create" ? "Next" : "Save Changes"}
+  </button>
+</div>
+
           </div>
         </>
       )}
 
       {step === "images" && (
         <>
-          <h2 className="text-xl font-semibold mb-4">
-            Upload Images (up to 5)
-          </h2>
+<h2 className="text-xl font-semibold mb-4">
+  {mode === "edit" ? "Edit Images" : "Upload Images"} (up to 5)
+</h2>
 
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={(e) =>
-              setFiles(Array.from(e.target.files || []))
-            }
-          />
+          {existingImages.length > 0 && (
+  <div className="grid grid-cols-5 gap-3 mb-4">
+    {existingImages.map((url) => (
+      <div key={url} className="relative">
+        <img
+          src={url}
+          className="w-full h-20 object-cover rounded"
+        />
+        <button
+          onClick={() =>
+            setExistingImages((prev) =>
+              prev.filter((img) => img !== url)
+            )
+          }
+          className="absolute top-1 right-1 bg-black/70 text-white text-xs px-1 rounded"
+        >
+          ✕
+        </button>
+      </div>
+    ))}
+  </div>
+)}
+
+
+<input
+  type="file"
+  accept="image/*"
+  multiple
+  onChange={(e) => {
+    const files = Array.from(e.target.files || []);
+    const remaining = MAX_IMAGES - existingImages.length;
+
+    if (files.length > remaining) {
+      alert(`You can upload only ${remaining} more image(s).`);
+      return;
+    }
+
+    setNewFiles(files);
+  }}
+/>
+
 
           <div className="flex justify-end gap-3 pt-6">
             <button
