@@ -13,6 +13,7 @@ import ChooseRole from "./pages/ChooseRole";
 import RoleGate from "./pages/RoleGate";
 import SellerDashboard from "./pages/seller/SellerDashboard";
 import HomeGate from "./pages/HomeGate";
+import BuyerDashboard from "./pages/buyer/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
              <Route path="/" element={<HomeGate />} />
+             <Route path = "/buyer/Dashboard" element = {<BuyerDashboard/>}/>
             <Route path="/auth" element={<Auth />} />
             <Route path="/app" element={<RoleGate />} />
             <Route path="/index" element={<Index />} />

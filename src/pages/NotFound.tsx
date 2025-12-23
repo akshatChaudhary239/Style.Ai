@@ -1,8 +1,9 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
-
+import { useNavigate } from "react-router-dom";
 const NotFound = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);
@@ -16,6 +17,8 @@ const NotFound = () => {
         <a href="/" className="text-primary underline hover:text-primary/90">
           Return to Home
         </a>
+        <button onClick={() => navigate("/buyer/Dashboard")}>Go to Dashboard</button>
+
       </div>
     </div>
   );

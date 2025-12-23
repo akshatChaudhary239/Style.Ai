@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import ProductList from "./ProductList";
 import ProductEditor from "./ProductEditor";
 import { Database } from "@/integrations/supabase/types";
+import AppNavbar from "@/components/AppNavbar";
 
 type Product =
   Database["public"]["Tables"]["products"]["Row"];
@@ -101,6 +102,10 @@ const [selectedProduct, setSelectedProduct] =
 
   return (
       <>
+      <AppNavbar />
+      <Outlet/>
+
+
       <div className={`flex h-screen ${activePanel !== "none" ? "blur-sm pointer-events-none" : ""}`}> 
        {/* Sidebar */}
        <aside className="w-1/5 bg-muted p-4">
