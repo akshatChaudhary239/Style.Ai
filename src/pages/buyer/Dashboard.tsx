@@ -2,8 +2,10 @@ import AppNavbar from "@/components/AppNavbar";
 import { Outlet } from "react-router-dom";
 import BuyerHome from "./Buyerhome";
 import StylistChat from "@/components/StylistChat";
+import { StyleContextProvider, useStyleContext } from "@/context/StyleContext";
 
 export default function BuyerLayout() {
+   const { context } = useStyleContext();
   return (
     <div className="min-h-screen bg-gray-50">
       <AppNavbar />
@@ -35,13 +37,24 @@ export default function BuyerLayout() {
             </div>
           </nav>
         </aside>
+        
 
         {/* MAIN CONTENT (80%) */}
-        <main className="w-[80%] p-8">
-          <BuyerHome/>
+        <main className="w-[80%] p-8 space-y-4">
+          
+          {/* ✅ STEP 5 DIV GOES HERE */}
+          {Object.keys(context).length > 0 && (
+            <div className="text-sm text-gray-500 bg-white border rounded-lg px-4 py-2">
+              Applying filters: {JSON.stringify(context)}
+            </div>
+          )}
+
+          <BuyerHome />
           <StylistChat />
         </main>
+       
       </div>
+      
     </div>
   );
 }

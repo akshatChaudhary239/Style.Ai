@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useStyleContext } from "@/context/StyleContext";
+import { parseIntent } from "@/utils/parseIntent";
 
 const SUGGESTED_PROMPTS = [
   "Wedding outfits",
@@ -12,18 +14,15 @@ export default function StylistChat() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [confirmation, setConfirmation] = useState<string | null>(null);
-
+ const { setContext } = useStyleContext();
   function handleSend(text: string) {
     if (!text.trim()) return;
 
-    // For now: just show confirmation
+    const ctx = parseIntent(text);
+    setContext(ctx);
+
     setConfirmation("Got it. I’ll keep this in mind ✨");
     setInput("");
-
-    // Later:
-    // - parse intent
-    // - set context
-    // - refresh recommendations
   }
 
   return (
