@@ -1,6 +1,7 @@
 import AppNavbar from "@/components/AppNavbar";
 import { Outlet } from "react-router-dom";
 import BuyerHome from "./Buyerhome";
+import StylistChat from "@/components/StylistChat";
 
 export default function BuyerLayout() {
   return (
@@ -38,6 +39,7 @@ export default function BuyerLayout() {
         {/* MAIN CONTENT (80%) */}
         <main className="w-[80%] p-8">
           <BuyerHome/>
+          <StylistChat />
         </main>
       </div>
     </div>
