@@ -4,7 +4,7 @@ import BuyerHome from "./Buyerhome";
 import StylistChat from "@/components/StylistChat";
 import { StyleContextProvider, useStyleContext } from "@/context/StyleContext";
 
-export default function BuyerLayout() {
+function BuyerLayoutInner()  {
    const { context } = useStyleContext();
   return (
     <div className="min-h-screen bg-gray-50">
@@ -41,10 +41,9 @@ export default function BuyerLayout() {
 
         {/* MAIN CONTENT (80%) */}
         <main className="w-[80%] p-8 space-y-4">
-          
-          {/* ✅ STEP 5 DIV GOES HERE */}
+          {/* Debug div */}
           {Object.keys(context).length > 0 && (
-            <div className="text-sm text-gray-500 bg-white border rounded-lg px-4 py-2">
+            <div className="text-sm text-gray-500 bg-white border rounded px-3 py-2">
               Applying filters: {JSON.stringify(context)}
             </div>
           )}
@@ -56,5 +55,12 @@ export default function BuyerLayout() {
       </div>
       
     </div>
+  );
+}
+export default function BuyerLayout() {
+  return (
+    <StyleContextProvider>
+      <BuyerLayoutInner />
+    </StyleContextProvider>
   );
 }

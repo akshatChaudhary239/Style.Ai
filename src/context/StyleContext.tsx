@@ -15,7 +15,11 @@ type StyleContextType = {
 
 const StyleContext = createContext<StyleContextType | null>(null);
 
-export function StyleContextProvider({ children }: { children: React.ReactNode }) {
+export function StyleContextProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [context, setContextState] = useState<StyleContextState>({});
 
   function setContext(ctx: Partial<StyleContextState>) {
@@ -35,6 +39,8 @@ export function StyleContextProvider({ children }: { children: React.ReactNode }
 
 export function useStyleContext() {
   const ctx = useContext(StyleContext);
-  if (!ctx) throw new Error("useStyleContext must be used inside provider");
+  if (!ctx) {
+    throw new Error("useStyleContext must be used inside StyleContextProvider");
+  }
   return ctx;
 }
