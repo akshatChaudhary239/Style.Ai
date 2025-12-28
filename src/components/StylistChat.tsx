@@ -92,7 +92,7 @@ export default function StylistChat() {
               </button>
             </div>
 
-          </div>
+          </div>  
         </div>
       )}
     </>
