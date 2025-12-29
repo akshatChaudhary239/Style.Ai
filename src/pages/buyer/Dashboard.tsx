@@ -5,7 +5,8 @@ import StylistChat from "@/components/StylistChat";
 import { StyleContextProvider, useStyleContext } from "@/context/StyleContext";
 
 function BuyerLayoutInner()  {
-   const { context } = useStyleContext();
+  const { appliedContext } = useStyleContext();
+
   return (
     <div className="min-h-screen bg-gray-50">
       <AppNavbar />
@@ -42,11 +43,7 @@ function BuyerLayoutInner()  {
         {/* MAIN CONTENT (80%) */}
         <main className="w-[80%] p-8 space-y-4">
           {/* Debug div */}
-          {Object.keys(context).length > 0 && (
-            <div className="text-sm text-gray-500 bg-white border rounded px-3 py-2">
-              Applying filters: {JSON.stringify(context)}
-            </div>
-          )}
+
 
           <BuyerHome />
           <StylistChat />

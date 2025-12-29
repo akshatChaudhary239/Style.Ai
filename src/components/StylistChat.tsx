@@ -14,12 +14,13 @@ export default function StylistChat() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [confirmation, setConfirmation] = useState<string | null>(null);
- const { setContext } = useStyleContext();
+ const { setDraftContext } = useStyleContext();
+
   function handleSend(text: string) {
     if (!text.trim()) return;
 
     const ctx = parseIntent(text);
-    setContext(ctx);
+    setDraftContext(ctx);
 
     setConfirmation("Got it. I’ll keep this in mind ✨");
     setInput("");
