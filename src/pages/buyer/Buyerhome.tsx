@@ -1,6 +1,27 @@
+import { useStyleContext } from "@/context/StyleContext";
+import ContextBadge from "./ContextBadge";
+
 export default function BuyerHome() {
+  const {
+    draftContext,
+    appliedContext,
+    setDraftContext,
+    applyContext,
+  } = useStyleContext();
+
   return (
     <div className="space-y-8">
+      {/* Context Badge */}
+      <ContextBadge
+        draftContext={draftContext}
+        appliedContext={appliedContext}
+        onApply={applyContext}
+        onEdit={() => {
+          // later: open StylistChat modal
+          setDraftContext({ occasion: "wedding" }); // TEMP TEST
+        }}
+      />
+
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold">Welcome back 👋</h1>
@@ -8,6 +29,13 @@ export default function BuyerHome() {
           Here’s what we think you’ll love today.
         </p>
       </div>
+
+      {/* TEMP DEBUG — REMOVE LATER */}
+      <pre className="text-xs bg-black text-green-400 p-3 rounded">
+        {JSON.stringify({ draftContext, appliedContext }, null, 2)}
+      </pre>
+
+
 
       {/* Recommended Section */}
       <section>
