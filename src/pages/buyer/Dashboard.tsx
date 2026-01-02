@@ -3,6 +3,8 @@ import { Outlet } from "react-router-dom";
 import BuyerHome from "./Buyerhome";
 import StylistChat from "@/components/StylistChat";
 import { StyleContextProvider, useStyleContext } from "@/context/StyleContext";
+import { NavLink } from "react-router-dom";
+
 
 function BuyerLayoutInner()  {
   const { appliedContext } = useStyleContext();
@@ -14,29 +16,57 @@ function BuyerLayoutInner()  {
       <div className="flex">
         {/* SIDEBAR (20%) */}
         <aside className="w-[20%] min-h-[calc(100vh-56px)] bg-white border-r px-4 py-6">
-          <nav className="flex flex-col gap-3">
-            <button className="text-left px-3 py-2 rounded-lg hover:bg-gray-100">
-              🏠 Home
-            </button>
-            <button className="text-left px-3 py-2 rounded-lg hover:bg-gray-100">
-              ✨ Recommendations
-            </button>
-            <button className="text-left px-3 py-2 rounded-lg hover:bg-gray-100">
-              ❤️ Liked Clothes
-            </button>
-            <button className="text-left px-3 py-2 rounded-lg hover:bg-gray-100">
-              🧍 Profile
-            </button>
+    <nav className="flex flex-col gap-3">
+  <NavLink
+    to="/buyer"
+    className={({ isActive }) =>
+      `text-left px-3 py-2 rounded-lg ${
+        isActive
+          ? "bg-pink-100 text-pink-600"
+          : "hover:bg-gray-100"
+      }`
+    }
+  >
+    🏠 Home
+  </NavLink>
 
-            <div className="mt-6 border-t pt-4">
-              <button className="text-left px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-500">
-                🛒 Cart (coming soon)
-              </button>
-              <button className="text-left px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-500">
-                ❓ Help & Support
-              </button>
-            </div>
-          </nav>
+  <NavLink
+    to="/buyer/recommendations"
+    className={({ isActive }) =>
+      `text-left px-3 py-2 rounded-lg ${
+        isActive
+          ? "bg-pink-100 text-pink-600"
+          : "hover:bg-gray-100"
+      }`
+    }
+  >
+    🧠 Style.AI
+  </NavLink>
+
+  <NavLink
+    to="/buyer/liked"
+    className="text-left px-3 py-2 rounded-lg hover:bg-gray-100"
+  >
+    ❤️ Liked Clothes
+  </NavLink>
+
+  <NavLink
+    to="/buyer/profile"
+    className="text-left px-3 py-2 rounded-lg hover:bg-gray-100"
+  >
+    🧍 Profile
+  </NavLink>
+
+  <div className="mt-6 border-t pt-4">
+    <button className="text-left px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-500">
+      🛒 Cart (coming soon)
+    </button>
+    <button className="text-left px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-500">
+      ❓ Help & Support
+    </button>
+  </div>
+</nav>
+
         </aside>
         
 
