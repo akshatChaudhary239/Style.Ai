@@ -7,13 +7,16 @@ import { AuthProvider } from "@/hooks/useAuth";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
-import Recommendation from "../src/pages/Recommendations";
+// import Recommendation from "../src/pages/Recommendations";
 import BecomeSeller from "./pages/BecomeSeller";
 import ChooseRole from "./pages/ChooseRole";
 import RoleGate from "./pages/RoleGate";
 import SellerDashboard from "./pages/seller/SellerDashboard";
 import HomeGate from "./pages/HomeGate";
 import BuyerDashboard from "./pages/buyer/Dashboard";
+import BuyerLayout from "@/pages/buyer/Dashboard";
+import BuyerHome from "@/pages/buyer/Buyerhome";
+import Recommendations from "@/pages/buyer/Recommendations";
 
 const queryClient = new QueryClient();
 
@@ -25,18 +28,30 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
+
+            
              <Route path="/" element={<HomeGate />} />
              <Route path = "/buyer/Dashboard" element = {<BuyerDashboard/>}/>
             <Route path="/auth" element={<Auth />} />
             <Route path="/app" element={<RoleGate />} />
             <Route path="/index" element={<Index />} />
             <Route path="/seller/SellerDashboard" element={<SellerDashboard />} />
-            <Route path="/recommendation" element={<Recommendation />} />
+            {/* <Route path="/recommendation" element={<Recommendation />} /> */}
             <Route path="/become-seller" element={<BecomeSeller />} />
             <Route path="/choose-role" element={<ChooseRole />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <Routes>
+  {/* BUYER ROUTES */}
+  <Route path="/buyer" element={<BuyerDashboard />}>
+    <Route index element={<BuyerHome />} />
+    <Route path="recommendations" element={<Recommendations />} />
+    {/* later */}
+    {/* <Route path="liked" element={<Liked />} /> */}
+    {/* <Route path="profile" element={<Profile />} /> */}
+  </Route>
+</Routes>
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>

@@ -49,7 +49,7 @@ export default function BuyerHome() {
 
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold">Welcome back 👋</h1>
+        <h1 className="text-2xl font-bold">Welcome back👋, we were missing you</h1>
         <p className="text-gray-500 mt-1">
           Here’s what we think you’ll love today.
         </p>
