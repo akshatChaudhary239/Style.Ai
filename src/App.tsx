@@ -26,33 +26,27 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
-          <Routes>
+<BrowserRouter>
+  <Routes>
+    <Route path="/" element={<HomeGate />} />
+    <Route path="/auth" element={<Auth />} />
+    <Route path="/app" element={<RoleGate />} />
+    <Route path="/index" element={<Index />} />
+    <Route path="/seller/SellerDashboard" element={<SellerDashboard />} />
+    <Route path="/become-seller" element={<BecomeSeller />} />
+    <Route path="/choose-role" element={<ChooseRole />} />
 
-            
-             <Route path="/" element={<HomeGate />} />
-             <Route path = "/buyer/Dashboard" element = {<BuyerDashboard/>}/>
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/app" element={<RoleGate />} />
-            <Route path="/index" element={<Index />} />
-            <Route path="/seller/SellerDashboard" element={<SellerDashboard />} />
-            {/* <Route path="/recommendation" element={<Recommendation />} /> */}
-            <Route path="/become-seller" element={<BecomeSeller />} />
-            <Route path="/choose-role" element={<ChooseRole />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <Routes>
-  {/* BUYER ROUTES */}
-  <Route path="/buyer" element={<BuyerDashboard />}>
-    <Route index element={<BuyerHome />} />
-    <Route path="recommendations" element={<Recommendations />} />
-    {/* later */}
-    {/* <Route path="liked" element={<Liked />} /> */}
-    {/* <Route path="profile" element={<Profile />} /> */}
-  </Route>
-</Routes>
-        </BrowserRouter>
+    {/* BUYER ROUTES (NESTED CORRECTLY) */}
+   <Route path="/buyer" element={<BuyerDashboard />}>
+  <Route index element={<BuyerHome />} />
+  <Route path="recommendations" element={<Recommendations />} />
+</Route>
+
+
+    <Route path="*" element={<NotFound />} />
+  </Routes>
+</BrowserRouter>
+
       </TooltipProvider>
     </AuthProvider>
   </QueryClientProvider>

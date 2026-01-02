@@ -1,13 +1,11 @@
 import AppNavbar from "@/components/AppNavbar";
 import { Outlet } from "react-router-dom";
-import BuyerHome from "./Buyerhome";
-import StylistChat from "@/components/StylistChat";
+
 import { StyleContextProvider, useStyleContext } from "@/context/StyleContext";
 import { NavLink } from "react-router-dom";
 
 
 function BuyerLayoutInner()  {
-  const { appliedContext } = useStyleContext();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -31,7 +29,7 @@ function BuyerLayoutInner()  {
   </NavLink>
 
   <NavLink
-    to="/buyer/recommendations"
+   to="/buyer/recommendations"  
     className={({ isActive }) =>
       `text-left px-3 py-2 rounded-lg ${
         isActive
@@ -71,13 +69,10 @@ function BuyerLayoutInner()  {
         
 
         {/* MAIN CONTENT (80%) */}
-        <main className="w-[80%] p-8 space-y-4">
-          {/* Debug div */}
+<main className="w-[80%] p-8 space-y-4">
+  <Outlet />
+</main>
 
-
-          <BuyerHome />
-          <StylistChat />
-        </main>
        
       </div>
       
