@@ -3,8 +3,10 @@ import { StyleContextState } from "@/context/StyleContext";
 
 export function generateOpinion(
   product: Product,
-  context: StyleContextState
-): RecommendationInsight {
+  context: StyleContextState,
+  confidence: "high" | "medium" | "low"
+)
+: RecommendationInsight {
   const positives: string[] = [];
   const concerns: string[] = [];
 
