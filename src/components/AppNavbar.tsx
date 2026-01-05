@@ -1,6 +1,18 @@
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import type { LucideIcon } from "lucide-react";
+
+import {
+  LogOut,
+  RefreshCcw,
+  ShoppingBag,
+  Store,
+  Sparkles,
+  Heart,
+  LayoutDashboard,
+} from "lucide-react";
 
 type Role = "buyer" | "seller";
 
@@ -26,10 +38,9 @@ export default function AppNavbar() {
       .eq("id", user.id)
       .single();
 
-if (data?.active_role === "buyer" || data?.active_role === "seller") {
-  setActiveRole(data.active_role);
-}
-
+    if (data?.active_role === "buyer" || data?.active_role === "seller") {
+      setActiveRole(data.active_role);
+    }
   }
 
   async function switchRole() {
@@ -63,46 +74,111 @@ if (data?.active_role === "buyer" || data?.active_role === "seller") {
   }
 
   return (
-    <div className="w-full h-14 px-6 flex items-center justify-between border-b">
-      {/* LEFT */}
-      <div className="font-bold text-lg">Style.AI</div>
-
-      {/* CENTER (ROLE-BASED NAV) */}
-      <div className="flex gap-4">
-        {activeRole === "seller" && (
-          <>
-            <button onClick={() => navigate("/seller/SellerDashboard")}>Dashboard</button>
-            <button onClick={() => navigate("/seller/productLists")}>Products</button>
-          </>
-        )}
-
-        {activeRole === "buyer" && (
-          <>
-            <button onClick={() => navigate("/buyer")}>Discover</button>
-            <button onClick={() => navigate("/buyer/favorites")}>Favorites</button>
-          </>
-        )}
-      </div>
-
-      {/* RIGHT */}
-      <div className="flex gap-3 items-center">
-        {activeRole && (
-          <button
-            onClick={switchRole}
-            disabled={loading}
-            className="border px-3 py-1 rounded"
-          >
-            Switch to {activeRole === "seller" ? "Buyer" : "Seller"}
-          </button>
-        )}
-
+    <motion.header
+      initial={{ y: -16, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur"
+    >
+      <div className="h-14 px-4 sm:px-6 flex items-center justify-between">
+        {/* LEFT — BRAND */}
         <button
-          onClick={logout}
-          className="border px-3 py-1 rounded"
+          onClick={() =>
+            navigate(activeRole === "seller" ? "/seller" : "/buyer")
+          }
+          className="flex items-center gap-2 font-semibold text-lg tracking-tight"
         >
-          Logout
+          <Sparkles className="h-5 w-5 text-primary" />
+          <span>Style.AI</span>
         </button>
+
+        {/* CENTER — NAV (hidden on mobile) */}
+        <div className="hidden md:flex items-center gap-1 rounded-full bg-muted p-1">
+          {activeRole === "seller" && (
+            <>
+              <NavPill
+                label="Dashboard"
+                icon={LayoutDashboard}
+                onClick={() => navigate("/seller/SellerDashboard")}
+              />
+              <NavPill
+                label="Products"
+                icon={Store}
+                onClick={() => navigate("/seller/productLists")}
+              />
+            </>
+          )}
+
+          {activeRole === "buyer" && (
+            <>
+              <NavPill
+                label="Discover"
+                icon={ShoppingBag}
+                onClick={() => navigate("/buyer")}
+              />
+              <NavPill
+                label="Favorites"
+                icon={Heart}
+                onClick={() => navigate("/buyer/favorites")}
+              />
+            </>
+          )}
+        </div>
+
+        {/* RIGHT — ACTIONS */}
+        <div className="flex items-center gap-2">
+          {activeRole && (
+            <motion.button
+              whileTap={{ scale: 0.96 }}
+              onClick={switchRole}
+              disabled={loading}
+              className="flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm hover:bg-muted transition"
+            >
+              <RefreshCcw
+                className={`h-4 w-4 ${
+                  loading ? "animate-spin" : ""
+                }`}
+              />
+              <span className="hidden sm:inline">
+                Switch to {activeRole === "seller" ? "Buyer" : "Seller"}
+              </span>
+            </motion.button>
+          )}
+
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={logout}
+            className="rounded-full p-2 hover:bg-muted transition"
+            title="Logout"
+          >
+            <LogOut className="h-4 w-4 text-muted-foreground" />
+          </motion.button>
+        </div>
       </div>
-    </div>
+    </motion.header>
+  );
+}
+
+/* ---------- Nav Pill ---------- */
+function NavPill({
+  label,
+  icon: Icon,
+  onClick,
+}: {
+  label: string;
+  icon: LucideIcon;
+  onClick: () => void;
+}) {
+
+  return (
+    <motion.button
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.97 }}
+      onClick={onClick}
+      className="flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-background transition"
+    >
+      <Icon className="h-4 w-4" />
+      {label}
+    </motion.button>
   );
 }

@@ -94,104 +94,113 @@ async function deleteProduct(product: Product) {
 
   if (loading) return <p>Loading products...</p>;
 
-  return (
-    <div>
-<div className="flex items-center justify-between mb-6">
-  <h2 className="text-xl font-semibold">Your Products</h2>
+return (
+  <div className="w-full">
+    {/* Header */}
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <h2 className="text-2xl font-semibold">Your Products</h2>
 
-  <button
-    onClick={onCreate}
-    className="px-4 py-2 bg-primary text-primary-foreground rounded-lg"
-  >
-    + Add Product
-  </button>
-</div>
+      <button
+        onClick={onCreate}
+        className="w-full sm:w-auto mr-3 px-5 py-2 bg-primary text-primary-foreground rounded-lg shadow hover:opacity-90 transition"
+      >
+        + Add Product
+      </button>
+    </div>
 
+    {/* Empty State */}
+    {products.length === 0 && (
+      <div className="flex flex-col items-center justify-center py-20 border rounded-xl bg-muted/30 text-center">
+        <p className="text-lg font-medium mb-2">No products yet</p>
+        <p className="text-sm text-muted-foreground mb-6 max-w-xs">
+          Upload your first product to start appearing in buyer recommendations
+        </p>
 
-{products.length === 0 && (
-  <div className="flex flex-col items-center justify-center py-16 text-center">
-    <p className="text-lg font-medium mb-2">
-      No products yet
-    </p>
-    <p className="text-sm text-muted-foreground mb-6">
-      Start by uploading your first product
-    </p>
-
-<button
-  className="px-5 py-2 bg-primary text-primary-foreground rounded-lg"
-  onClick={onCreate}
->
-  + Upload Product
-</button>
-
-  </div>
-)}
-
-
-      <div className="space-y-4">
-        {products.map((product) => (
-<div
-  key={product.id}
-  className="flex items-center gap-4 border p-3 rounded-lg"
->
-  {/* Image */}
-  <div className="w-20 h-20 bg-muted rounded overflow-hidden">
-    {product.image_urls?.[0] ? (
-      <img
-        src={product.image_urls[0]}
-        className="w-full h-full object-cover"
-      />
-    ) : (
-      <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
-        No Image
+        <button
+          onClick={onCreate}
+          className="px-6 py-2 bg-primary text-primary-foreground rounded-lg shadow"
+        >
+          Upload Product
+        </button>
       </div>
     )}
-  </div>
 
-  {/* Info */}
-  <div className="flex-1">
-    <p className="font-medium">{product.name}</p>
-    <p className="text-sm text-muted-foreground">
-      {product.category || "No category"}
-    </p>
-    <span className="text-xs">
-      {product.status.toUpperCase()}
-    </span>
-  </div>
+    {/* Product Grid */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {products.map((product) => (
+        <div
+          key={product.id}
+          className="border rounded-xl p-4 bg-background shadow-sm hover:shadow-md transition"
+        >
+          {/* Image */}
+          <div className="w-full h-40 rounded-lg overflow-hidden bg-muted mb-4">
+            {product.image_urls?.[0] ? (
+              <img
+                src={product.image_urls[0]}
+                alt={product.name}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="h-full flex items-center justify-center text-sm text-muted-foreground">
+                No Image
+              </div>
+            )}
+          </div>
 
-  {/* ACTION BUTTONS ← THIS IS WHAT WAS MISSING */}
-<div className="flex gap-2">
-  <button
-    onClick={() => onEdit(product)}
-    className="px-3 py-1 text-sm border rounded"
-  >
-    Edit
-  </button>
+          {/* Info */}
+          <div className="flex items-start justify-between gap-2 mb-3">
+            <div>
+              <p className="font-medium leading-tight">{product.name}</p>
+              <p className="text-sm text-muted-foreground">
+                {product.category || "No category"}
+              </p>
+            </div>
 
-  <button
-    onClick={() => toggleStatus(product)}
-    className={`px-3 py-1 text-sm rounded ${
-      product.status === "draft"
-        ? "bg-green-600 text-white"
-        : "bg-yellow-500 text-white"
-    }`}
-  >
-    {product.status === "draft" ? "Publish" : "Unpublish"}
-  </button>
+            {/* Status Badge */}
+            <span
+              className={`text-xs px-2 py-1 rounded-full font-medium ${
+                product.status === "active"
+                  ? "bg-green-100 text-green-700"
+                  : "bg-gray-200 text-gray-700"
+              }`}
+            >
+              {product.status === "active" ? "Active" : "Draft"}
+            </span>
+          </div>
 
-  <button
-    onClick={() => deleteProduct(product)}
-    className="px-3 py-1 text-sm bg-red-600 text-white rounded"
-  >
-    Delete
-  </button>
-</div>
+          {/* Actions */}
+          <div className="flex flex-col gap-2 mt-4">
+            <div className="flex gap-2">
+              <button
+                onClick={() => onEdit(product)}
+                className="flex-1 border rounded-lg py-1.5 text-sm hover:bg-muted transition"
+              >
+                Edit
+              </button>
 
+              <button
+                onClick={() => toggleStatus(product)}
+                className={`flex-1 rounded-lg py-1.5 text-sm text-white transition ${
+                  product.status === "draft"
+                    ? "bg-green-600 hover:bg-green-700"
+                    : "bg-yellow-500 hover:bg-yellow-600"
+                }`}
+              >
+                {product.status === "draft" ? "Publish" : "Unpublish"}
+              </button>
+            </div>
 
-</div>
-
-        ))}
-      </div>
+            <button
+              onClick={() => deleteProduct(product)}
+              className="w-full text-sm py-1.5 rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      ))}
     </div>
-  );
+  </div>
+);
+
 }
