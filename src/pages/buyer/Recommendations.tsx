@@ -13,7 +13,7 @@ type RecommendationItem = ReturnType<typeof recommendProducts>[number];
 const MOCK_PRODUCTS: Product[] = [
   {
     id: "1",
-    name: "Elegant Kurta Set",
+    name: "Elegant Kurta Set of three",
     category: "ethnic",
     colors: ["cream", "gold"],
     sizes: ["M", "L"],
