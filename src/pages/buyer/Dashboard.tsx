@@ -26,19 +26,12 @@ function BuyerLayoutInner() {
             <NavItem to="/buyer" label="Home" icon="🏠" end />
             <NavItem to="/buyer/recommendations" label="Style.AI" icon="🧠" />
             <NavItem to="/buyer/liked" label="Liked Clothes" icon="❤️" />
-            <NavItem to="/buyer/profile" label="Profile" icon="🧍" />
+            <NavItem to="/buyer/Profile" label="Profile" icon="🧍" />
             <NavItem to="/buyer/Help" label="Help & support" icon="❓" />
           </nav>
 
           {/* Footer */}
-          <div className="border-t pt-4 space-y-2 text-sm text-gray-500">
-            <button className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100">
-              🛒 Cart (coming soon)
-            </button>
-            <button className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100">
-               Help & Support
-            </button>
-          </div>
+
         </aside>
 
         {/* MAIN AREA */}

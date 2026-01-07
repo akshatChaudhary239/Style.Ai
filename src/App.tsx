@@ -19,6 +19,7 @@ import BuyerHome from "@/pages/buyer/Buyerhome";
 import Recommendations from "@/pages/buyer/Recommendations";
 import LikedClothes from "./pages/buyer/LikedClothes";
 import HelpSupport from "./pages/buyer/HelpSupport";
+import ProfilePage from "./pages/buyer/ProfilePage";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +45,7 @@ const App = () => (
   <Route path="recommendations" element={<Recommendations />} />
   <Route path="liked" element={<LikedClothes />} /> 
   <Route path="help" element={<HelpSupport />} /> 
+  <Route path="Profile" element={<ProfilePage/>} /> 
 </Route>
 
 

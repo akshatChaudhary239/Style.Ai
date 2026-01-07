@@ -219,12 +219,7 @@ return (
     className="w-full max-w-lg mx-auto px-3 sm:px-0"
   >
     {/* Top Actions */}
-    <div className="flex justify-end mb-4">
-      <Button variant="ghost" size="sm" onClick={handleSignOut}>
-        <LogOut className="h-4 w-4 mr-2" />
-        Sign Out
-      </Button>
-    </div>
+
 
     {/* Existing profile hint */}
     {showUpdatePrompt && existingProfile && (
