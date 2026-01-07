@@ -26,7 +26,7 @@ function BuyerLayoutInner() {
             <NavItem to="/buyer" label="Home" icon="🏠" end />
             <NavItem to="/buyer/recommendations" label="Style.AI" icon="🧠" />
             <NavItem to="/buyer/liked" label="Liked Clothes" icon="❤️" />
-            <NavItem to="/buyer/profile" label="Profile" icon="🧍" />
+            <NavItem to="/buyer/" label="Help & support" icon="❓" />
           </nav>
 
           {/* Footer */}
@@ -35,7 +35,7 @@ function BuyerLayoutInner() {
               🛒 Cart (coming soon)
             </button>
             <button className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100">
-              ❓ Help & Support
+               Help & Support
             </button>
           </div>
         </aside>

@@ -18,6 +18,7 @@ import BuyerLayout from "@/pages/buyer/Dashboard";
 import BuyerHome from "@/pages/buyer/Buyerhome";
 import Recommendations from "@/pages/buyer/Recommendations";
 import LikedClothes from "./pages/buyer/LikedClothes";
+import HelpSupport from "./pages/buyer/HelpSupport";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +43,7 @@ const App = () => (
   <Route index element={<BuyerHome />} />
   <Route path="recommendations" element={<Recommendations />} />
   <Route path="liked" element={<LikedClothes />} /> 
+  <Route path="help" element={<HelpSupport />} /> 
 </Route>
 
 
