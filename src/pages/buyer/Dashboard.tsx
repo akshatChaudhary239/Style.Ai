@@ -9,7 +9,7 @@ function BuyerLayoutInner() {
       <AppNavbar />
 
       <div className="flex">
-        {/* SIDEBAR */}
+        {/* SIDEBAR — DESKTOP ONLY */}
         <aside className="hidden md:flex w-[260px] min-h-[calc(100vh-56px)] bg-white border-r px-5 py-6 flex-col">
           {/* Brand */}
           <div className="mb-8">
@@ -41,14 +41,31 @@ function BuyerLayoutInner() {
         </aside>
 
         {/* MAIN AREA */}
-        <main className="flex-1 px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-          
+<main
+  className="
+    flex-1
+    w-full
+    px-3
+    sm:px-6
+    lg:px-8
+    py-4
+    sm:py-6
+    space-y-5
+  "
+>
+
           {/* SOFT BANNER */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35 }}
-            className="rounded-xl border bg-gradient-to-r from-slate-100 to-gray-50 p-4 sm:p-5 shadow-sm"
+            className="
+              rounded-xl
+              border
+              bg-gradient-to-r from-slate-100 to-gray-50
+              p-3 sm:p-5
+              shadow-sm
+            "
           >
             <div className="flex items-start gap-3">
               <motion.span
@@ -64,20 +81,28 @@ function BuyerLayoutInner() {
                 <h3 className="text-sm sm:text-base font-semibold text-gray-900">
                   Your style, simplified
                 </h3>
-                <p className="text-sm text-gray-600 mt-1 max-w-xl">
-                  Tell Style.AI what you’re dressing for  we’ll take care of the rest.
+                <p className="text-xs sm:text-sm text-gray-600 mt-1 max-w-xl">
+                  Tell Style.AI what you’re dressing for — we’ll take care of the rest.
                 </p>
               </div>
             </div>
           </motion.div>
 
-          {/* PAGE CONTENT */}
+          {/* PAGE CONTENT — MOBILE HERO */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="bg-white rounded-xl p-5 sm:p-6 shadow-sm"
-          >
+className="
+  bg-white
+  rounded-2xl
+  p-4 sm:p-6
+  shadow-md
+  min-h-[60vh]
+  w-full
+  lg:max-w-none
+"
+>
             <Outlet />
           </motion.div>
         </main>
@@ -86,7 +111,7 @@ function BuyerLayoutInner() {
   );
 }
 
-/* Sidebar item extracted for clarity */
+/* Sidebar item */
 function NavItem({
   to,
   label,
@@ -103,11 +128,14 @@ function NavItem({
       to={to}
       end={end}
       className={({ isActive }) =>
-        `flex items-center gap-3 px-3 py-2 rounded-lg transition ${
+        `
+        flex items-center gap-3 px-3 py-2 rounded-lg transition
+        ${
           isActive
-            ? "bg-gray-700 text-white font-medium"
+            ? "bg-gray-800 text-white font-medium"
             : "text-gray-700 hover:bg-gray-100"
-        }`
+        }
+      `
       }
     >
       <span className="text-lg">{icon}</span>
