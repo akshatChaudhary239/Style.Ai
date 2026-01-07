@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { motion } from "framer-motion";
 import {
   Select,
   SelectContent,
@@ -210,151 +211,201 @@ export function ProfileForm() {
     return null;
   }
 
-  return (
-    <div className="w-full max-w-lg mx-auto animate-slide-up">
-      <div className="flex justify-end mb-4">
-        <Button variant="ghost" size="sm" onClick={handleSignOut}>
-          <LogOut className="h-4 w-4 mr-2" />
-          Sign Out
-        </Button>
-      </div>
+return (
+  <motion.div
+    initial={{ opacity: 0, y: 24 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5, ease: "easeOut" }}
+    className="w-full max-w-lg mx-auto px-3 sm:px-0"
+  >
+    {/* Top Actions */}
+    <div className="flex justify-end mb-4">
+      <Button variant="ghost" size="sm" onClick={handleSignOut}>
+        <LogOut className="h-4 w-4 mr-2" />
+        Sign Out
+      </Button>
+    </div>
 
-      {showUpdatePrompt && existingProfile && (
+    {/* Existing profile hint */}
+    {showUpdatePrompt && existingProfile && (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.1 }}
+      >
         <Card className="mb-6 border-primary/20 bg-primary/5 shadow-soft">
           <CardContent className="pt-6">
             <div className="flex items-start gap-3">
-              <div className="p-2 rounded-full bg-primary/10">
+              <motion.div
+                animate={{ rotate: [0, 10, -10, 0] }}
+                transition={{ repeat: Infinity, duration: 6 }}
+                className="p-2 rounded-full bg-primary/10"
+              >
                 <RefreshCw className="h-5 w-5 text-primary" />
-              </div>
+              </motion.div>
               <div>
-                <h3 className="font-display font-semibold text-foreground">Welcome back!</h3>
+                <h3 className="font-semibold text-foreground">
+                  Profile detected
+                </h3>
                 <p className="text-sm text-muted-foreground mt-1">
-                  We found your existing profile. Any changes in your body? Update your measurements below.
+                  Update your body details to keep recommendations accurate.
                 </p>
               </div>
             </div>
           </CardContent>
         </Card>
-      )}
+      </motion.div>
+    )}
 
-      <Card className="shadow-card border-border/50">
-        <CardHeader className="text-center pb-2">
-          <div className="mx-auto mb-4 p-3 rounded-2xl gradient-hero w-fit shadow-glow">
-            <User className="h-8 w-8 text-primary-foreground" />
-          </div>
-          <CardTitle className="font-display text-2xl">Style & Fit Profile</CardTitle>
-          <CardDescription className="text-muted-foreground">
-            Help us understand your body for better style recommendations
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6 pt-4">
+    {/* Main Card */}
+    <motion.div
+      layout
+      className="bg-white rounded-3xl shadow-xl border border-border/50"
+    >
+      <CardHeader className="text-center pb-2">
+        <motion.div
+          initial={{ scale: 0.9 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 0.2 }}
+          className="mx-auto mb-4 p-4 rounded-2xl gradient-hero w-fit shadow-glow"
+        >
+          <User className="h-8 w-8 text-primary-foreground" />
+        </motion.div>
+
+        <CardTitle className="text-2xl">
+          Style & Fit Profile
+        </CardTitle>
+        <CardDescription>
+          These inputs directly affect Style.AI’s recommendations
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent className="space-y-8 pt-6">
+        {/* Section: Measurements */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className="space-y-4"
+        >
+          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+            Body Measurements
+          </h3>
+
           <div className="grid grid-cols-2 gap-4">
+            {/* Height */}
             <div className="space-y-2">
-              <Label htmlFor="height" className="text-sm font-medium">
-                Height (cm)
-              </Label>
+              <Label>Height (cm)</Label>
               <Input
-                id="height"
                 type="number"
-                placeholder="170"
-                min={30}
-                max={300}
                 value={heightCm}
                 onChange={(e) => setHeightCm(e.target.value)}
-                className="h-12"
+                className="h-12 focus:ring-2 focus:ring-primary/30"
               />
             </div>
+
+            {/* Weight */}
             <div className="space-y-2">
-              <Label htmlFor="weight" className="text-sm font-medium">
-                Weight (kg)
-              </Label>
+              <Label>Weight (kg)</Label>
               <Input
-                id="weight"
                 type="number"
-                placeholder="70"
-                min={2}
-                max={500}
                 value={weightKg}
                 onChange={(e) => setWeightKg(e.target.value)}
-                className="h-12"
+                className="h-12 focus:ring-2 focus:ring-primary/30"
               />
             </div>
           </div>
+        </motion.div>
 
-          <div className="space-y-2">
-            <Label htmlFor="body-type" className="text-sm font-medium">
-              Body Type
-            </Label>
-            <Select value={bodyType} onValueChange={(v) => setBodyType(v as BodyType)}>
-              <SelectTrigger id="body-type" className="h-12 bg-background">
-                <SelectValue placeholder="Select body type" />
-              </SelectTrigger>
-              <SelectContent className="bg-popover border-border">
-                {BODY_TYPES.map((type) => (
-                  <SelectItem key={type.value} value={type.value}>
-                    {type.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+        {/* Section: Body Type */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35 }}
+          className="space-y-2"
+        >
+          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+            Body Structure
+          </h3>
 
-          <div className="space-y-2">
-            <Label htmlFor="skin-tone" className="text-sm font-medium">
-              Skin Tone
-            </Label>
-            <Select value={skinTone} onValueChange={(v) => setSkinTone(v as SkinTone)}>
-              <SelectTrigger id="skin-tone" className="h-12 bg-background">
-                <SelectValue placeholder="Select skin tone" />
-              </SelectTrigger>
-              <SelectContent className="bg-popover border-border">
-                {SKIN_TONES.map((tone) => (
-                  <SelectItem key={tone.value} value={tone.value}>
-                    {tone.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          <Select value={bodyType} onValueChange={(v) => setBodyType(v as BodyType)}>
+            <SelectTrigger className="h-12">
+              <SelectValue placeholder="Select body type" />
+            </SelectTrigger>
+            <SelectContent>
+              {BODY_TYPES.map((type) => (
+                <SelectItem key={type.value} value={type.value}>
+                  {type.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </motion.div>
 
-          <div className="pt-4 space-y-3">
-            <Button
-              onClick={handleSave}
-              disabled={isSaving}
-              variant="hero"
-              size="lg"
-              className="w-full"
-            >
-              {isSaving ? (
-                <>
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                  Saving...
-                </>
-              ) : existingProfile ? (
-                <>
-                  <RefreshCw className="h-5 w-5" />
-                  Update Profile
-                </>
-              ) : (
-                <>
-                  <Sparkles className="h-5 w-5" />
-                  Save Profile
-                </>
-              )}
-            </Button>
+        {/* Section: Skin Tone */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.45 }}
+          className="space-y-2"
+        >
+          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+            Appearance
+          </h3>
 
-            {existingProfile && (
-              <p className="text-xs text-center text-muted-foreground">
-                Last updated: {new Date(existingProfile.updated_at).toLocaleDateString()}
-              </p>
+          <Select value={skinTone} onValueChange={(v) => setSkinTone(v as SkinTone)}>
+            <SelectTrigger className="h-12">
+              <SelectValue placeholder="Select skin tone" />
+            </SelectTrigger>
+            <SelectContent>
+              {SKIN_TONES.map((tone) => (
+                <SelectItem key={tone.value} value={tone.value}>
+                  {tone.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </motion.div>
+
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+          className="pt-4"
+        >
+          <Button
+            onClick={handleSave}
+            disabled={isSaving}
+            size="lg"
+            variant="hero"
+            className="w-full"
+          >
+            {isSaving ? (
+              <>
+                <Loader2 className="h-5 w-5 animate-spin" />
+                Updating Style.AI…
+              </>
+            ) : (
+              <>
+                <Sparkles className="h-5 w-5" />
+                Update Style Profile
+              </>
             )}
-          </div>
-        </CardContent>
-      </Card>
+          </Button>
 
-      <p className="text-xs text-center text-muted-foreground mt-6 px-4">
-        This is NOT a medical tool. Data is used solely for style and fit recommendations.
-      </p>
-    </div>
-  );
-}
+          {existingProfile && (
+            <p className="text-xs text-center text-muted-foreground mt-2">
+              Last updated:{" "}
+              {new Date(existingProfile.updated_at).toLocaleDateString()}
+            </p>
+          )}
+        </motion.div>
+      </CardContent>
+    </motion.div>
+
+    <p className="text-xs text-center text-muted-foreground mt-6 px-4">
+      This is not a medical tool. Data is used only for personalized styling.
+    </p>
+  </motion.div>
+)};

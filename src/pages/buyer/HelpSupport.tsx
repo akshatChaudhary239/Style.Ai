@@ -27,7 +27,7 @@ export default function HelpSupport() {
   function handleSubmit() {
     if (!message.trim()) return;
 
-    // SIMPLE V1: mailto (upgrade later)
+   
     window.location.href = `mailto:support@styleai.app?subject=Style.AI Support&body=${encodeURIComponent(
       message
     )}`;

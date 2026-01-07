@@ -26,7 +26,8 @@ function BuyerLayoutInner() {
             <NavItem to="/buyer" label="Home" icon="🏠" end />
             <NavItem to="/buyer/recommendations" label="Style.AI" icon="🧠" />
             <NavItem to="/buyer/liked" label="Liked Clothes" icon="❤️" />
-            <NavItem to="/buyer/" label="Help & support" icon="❓" />
+            <NavItem to="/buyer/profile" label="Profile" icon="🧍" />
+            <NavItem to="/buyer/Help" label="Help & support" icon="❓" />
           </nav>
 
           {/* Footer */}
