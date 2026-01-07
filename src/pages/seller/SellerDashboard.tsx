@@ -33,26 +33,50 @@ export default function SellerDashboard() {
 
   const availableSlots = totalSlots - usedSlots;
 
-  return (
-    <div className="space-y-8">
+return (
+  <div className="space-y-10">
+    
+    {/* HERO */}
+    <div className="rounded-2xl bg-gradient-to-r from-slate-900 to-slate-700 p-8 text-white shadow-md">
+      <h1 className="text-3xl font-semibold">
+        Seller Dashboard
+      </h1>
+      <p className="mt-2 text-slate-300 max-w-xl">
+        Manage your store, track slots, and grow with Style.AI.
+      </p>
+    </div>
+
+    {/* STATS */}
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <StatCard label="Total Slots" value={totalSlots} />
+      <StatCard label="Used Slots" value={usedSlots} />
+      <StatCard
+        label="Available Slots"
+        value={availableSlots}
+        highlight={availableSlots === 0 ? "danger" : "success"}
+      />
+    </div>
+
+    {/* FUTURE / CTA */}
+    <div className="rounded-2xl border bg-white p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
-        <h1 className="text-2xl font-semibold">Seller Dashboard</h1>
-        <p className="text-sm text-muted-foreground">
-          Overview of your store activity
+        <h3 className="font-medium text-gray-900">
+          Ready to add more products?
+        </h3>
+        <p className="text-sm text-gray-500 mt-1">
+          Buy more slots to increase your store visibility.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <StatCard label="Total Slots" value={totalSlots} />
-        <StatCard label="Used Slots" value={usedSlots} />
-        <StatCard
-          label="Available Slots"
-          value={availableSlots}
-          highlight={availableSlots === 0 ? "danger" : "success"}
-        />
-      </div>
+      <button className="rounded-xl bg-primary px-4 py-2 text-primary-foreground hover:opacity-90 transition">
+        Buy Slots (coming soon)
+      </button>
     </div>
-  );
+
+  </div>
+);
+
+
 }
 
 function StatCard({ label, value, highlight }: StatCardProps) {

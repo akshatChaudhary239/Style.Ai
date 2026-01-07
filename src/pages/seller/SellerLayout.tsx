@@ -54,34 +54,44 @@ export default function SellerLayout() {
     );
   }
 
-  return (
-    <>
-      <AppNavbar />
+return (
+  <>
+    <AppNavbar />
 
-      <div className="flex min-h-screen bg-background">
-        {/* SIDEBAR */}
-        <aside className="hidden md:flex w-64 border-r bg-muted/40 p-6 flex-col">
-          <h2 className="font-semibold text-lg mb-8 truncate">
+    <div className="min-h-[calc(100vh-56px)] bg-gradient-to-br from-slate-50 to-gray-100 flex">
+      
+      {/* SIDEBAR — 20% */}
+      <aside className="hidden md:flex w-[20%] min-w-[240px] bg-white border-r px-5 py-6 flex-col">
+        <div className="mb-8">
+          <p className="text-xs uppercase tracking-wide text-gray-400">
+            Seller Panel
+          </p>
+          <h2 className="text-xl font-semibold text-gray-900 truncate">
             {storeName}
           </h2>
+        </div>
 
-          <nav className="space-y-2 text-sm">
-            <NavItem to="/seller/dashboard" icon={BarChart3} label="Dashboard" />
-            <NavItem to="/seller/products" icon={Package} label="Products" />
-            <NavItem to="/seller/help" icon={HelpCircle} label="Help" />
-          </nav>
-        </aside>
+        <nav className="flex flex-col gap-2 flex-1">
+          <NavItem to="/seller/dashboard" icon={BarChart3} label="Dashboard" />
+          <NavItem to="/seller/products" icon={Package} label="Products" />
+          <NavItem to="/seller/help" icon={HelpCircle} label="Help & Support" />
+        </nav>
 
-        {/* PAGE CONTENT */}
-<main className="flex-1 p-6 sm:p-8">
-  <div className="max-w-7xl mx-auto w-full">
-    <Outlet />
-  </div>
-</main>
+        <div className="border-t pt-4 text-sm text-gray-500">
+          <p>Powered by Style.AI</p>
+        </div>
+      </aside>
 
-      </div>
-    </>
-  );
+      {/* MAIN CONTENT — 80% */}
+      <main className="w-full md:w-[80%] px-4 sm:px-6 lg:px-8 py-6">
+        <div className="max-w-6xl mx-auto">
+          <Outlet />
+        </div>
+      </main>
+    </div>
+  </>
+);
+
 }
 
 function NavItem({ to, icon: Icon, label }: NavItemProps) {
