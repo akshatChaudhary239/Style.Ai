@@ -20,6 +20,9 @@ import Recommendations from "@/pages/buyer/Recommendations";
 import LikedClothes from "./pages/buyer/LikedClothes";
 import HelpSupport from "./pages/buyer/HelpSupport";
 import ProfilePage from "./pages/buyer/ProfilePage";
+import SellerHelpSupport from "./pages/seller/SellerHelpSupport";
+import SellerLayout from "./pages/seller/SellerLayout";
+import SellerProducts from "./pages/seller/SellerProducts";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +39,7 @@ const App = () => (
     <Route path="/app" element={<RoleGate />} />
     <Route path="/index" element={<Index />} />
     <Route path="/seller/SellerDashboard" element={<SellerDashboard />} />
+    <Route path="/seller/SellerHelpSupport" element={<SellerHelpSupport />} />
     <Route path="/become-seller" element={<BecomeSeller />} />
     <Route path="/choose-role" element={<ChooseRole />} />
 
@@ -46,6 +50,14 @@ const App = () => (
   <Route path="liked" element={<LikedClothes />} /> 
   <Route path="help" element={<HelpSupport />} /> 
   <Route path="Profile" element={<ProfilePage/>} /> 
+</Route>
+
+{/* Seller routes */}
+<Route path="/seller" element={<SellerLayout />}>
+  <Route index element={<SellerDashboard />} />
+  <Route path="dashboard" element={<SellerDashboard />} />
+  <Route path="products" element={<SellerProducts />} />
+  <Route path="help" element={<SellerHelpSupport />} />
 </Route>
 
 

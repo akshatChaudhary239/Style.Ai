@@ -17,7 +17,7 @@ const NotFound = () => {
         <a href="/" className="text-primary underline hover:text-primary/90">
           Return to Home
         </a>
-        <button onClick={() => navigate("/buyer")}>Go to Dashboard</button>
+        <button onClick={() => navigate("/seller/SellerDashboard")}>Go to Dashboard</button>
 
       </div>
     </div>
