@@ -1,6 +1,6 @@
 import AppNavbar from "@/components/AppNavbar";
 import { Outlet } from "react-router-dom";
-
+import { motion } from "framer-motion";
 import { StyleContextProvider, useStyleContext } from "@/context/StyleContext";
 import { NavLink } from "react-router-dom";
 
@@ -60,22 +60,37 @@ function BuyerLayoutInner() {
         </aside>
 
         {/* MAIN CONTENT */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 space-y-6">
-          {/* Engagement Banner */}
-          <div className="rounded-xl bg-gradient-to-r from-gray-900 to-gray-700 text-white p-6 shadow">
-            <h3 className="text-lg font-semibold mb-1">
-              Your style, simplified
-            </h3>
-            <p className="text-sm text-gray-200 max-w-xl">
-              Tell Style.AI what you’re dressing for — we’ll handle the rest.
-            </p>
-          </div>
+<motion.div
+  initial={{ opacity: 0, y: 12 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.4 }}
+  className="rounded-xl bg-gradient-to-r from-slate-100 to-gray-50 border p-5 sm:p-6 shadow-sm"
+>
+  <div className="flex items-start gap-3">
+    {/* Subtle Icon */}
+    <motion.div
+      initial={{ scale: 0.9 }}
+      animate={{ scale: 1 }}
+      transition={{ delay: 0.2 }}
+      className="text-xl"
+    >
+      ✨
+    </motion.div>
 
-          {/* Content Card */}
+    {/* Text */}
+    <div>
+      <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+        Your style, simplified
+      </h3>
+      <p className="text-sm text-gray-600 mt-1 max-w-xl">
+        Tell Style.AI what you’re dressing for — we’ll take care of the rest.
+      </p>
+    </div>
+  </div>
+</motion.div>
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <Outlet />
           </div>
-        </main>
       </div>
     </div>
   );
