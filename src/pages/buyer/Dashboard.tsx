@@ -24,7 +24,7 @@ function BuyerLayoutInner() {
           </div>
 
           {/* Navigation */}
-          <nav className="flex flex-col gap-2 flex-1">
+          <nav className="flex flex-col gap-3 flex-1">
             {[
               { to: "/buyer", label: "Home", icon: "🏠" },
               { to: "/buyer/recommendations", label: "Style.AI", icon: "🧠" },
