@@ -105,7 +105,7 @@ function NavItem({
       className={({ isActive }) =>
         `flex items-center gap-3 px-3 py-2 rounded-lg transition ${
           isActive
-            ? "bg-gray-900 text-white font-medium"
+            ? "bg-gray-700 text-white font-medium"
             : "text-gray-700 hover:bg-gray-100"
         }`
       }
