@@ -48,10 +48,7 @@ return (
 <h1 className="text-3xl font-semibold">
   Welcome back 👋
 </h1>
-<p className="mt-2 text-slate-300">
-  You’ve used <span className="text-white font-medium">{usedSlots}</span> out of{" "}
-  <span className="text-white font-medium">{totalSlots}</span> slots
-</p>
+
 
 
 
@@ -86,11 +83,7 @@ return (
     </div>
 
     {/* FUTURE / CTA */}
-<div className="grid grid-cols-1 md:grid-cols-3 gap-6 opacity-60">
-  <div className="rounded-xl border p-5">Views (Coming soon)</div>
-  <div className="rounded-xl border p-5">Top Products</div>
-  <div className="rounded-xl border p-5">Buyer Interest</div>
-</div>
+
 
 
   </div>

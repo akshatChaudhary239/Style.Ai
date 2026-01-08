@@ -38,8 +38,8 @@ const App = () => (
     <Route path="/auth" element={<Auth />} />
     <Route path="/app" element={<RoleGate />} />
     <Route path="/index" element={<Index />} />
-    <Route path="/seller/SellerDashboard" element={<SellerDashboard />} />
-    <Route path="/seller/SellerHelpSupport" element={<SellerHelpSupport />} />
+    {/* <Route path="/seller/SellerDashboard" element={<SellerDashboard />} /> */}
+    {/* <Route path="/seller/SellerHelpSupport" element={<SellerHelpSupport />} /> */}
     <Route path="/become-seller" element={<BecomeSeller />} />
     <Route path="/choose-role" element={<ChooseRole />} />
 
@@ -55,7 +55,7 @@ const App = () => (
 {/* Seller routes */}
 <Route path="/seller" element={<SellerLayout />}>
   <Route index element={<SellerDashboard />} />
-  <Route path="dashboard" element={<SellerDashboard />} />
+  <Route path="/seller/dashboard" element={<SellerDashboard />} />
   <Route path="products" element={<SellerProducts />} />
   <Route path="help" element={<SellerHelpSupport />} />
 </Route>

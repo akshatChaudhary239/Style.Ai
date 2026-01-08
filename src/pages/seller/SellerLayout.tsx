@@ -61,7 +61,7 @@ return (
     <div className="min-h-[calc(100vh-56px)] bg-slate-50 flex">
       
       {/* SIDEBAR — 20% */}
-      <aside className="hidden md:flex w-[280px] shrink-0 bg-white border-r px-6 py-8 flex-col">
+      <aside className="lex w-[280px] shrink-0 bg-white border-r px-6 py-8 flex-col">
         <div className="mb-8">
           <p className="text-xs uppercase tracking-wide text-gray-400">
             Seller Panel
