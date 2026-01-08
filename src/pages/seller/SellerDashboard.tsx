@@ -45,7 +45,13 @@ return (
         Manage your store, track slots, and grow with Style.AI.
       </p>
     </div>
-
+<h1 className="text-3xl font-semibold">
+  Welcome back 👋
+</h1>
+<p className="mt-2 text-slate-300">
+  You’ve used <span className="text-white font-medium">{usedSlots}</span> out of{" "}
+  <span className="text-white font-medium">{totalSlots}</span> slots
+</p>
     {/* STATS */}
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
       <StatCard label="Total Slots" value={totalSlots} />

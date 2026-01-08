@@ -58,10 +58,10 @@ return (
   <>
     <AppNavbar />
 
-    <div className="min-h-[calc(100vh-56px)] bg-gradient-to-br from-slate-50 to-gray-100 flex">
+    <div className="min-h-[calc(100vh-56px)] bg-slate-50 flex">
       
       {/* SIDEBAR — 20% */}
-      <aside className="hidden md:flex w-[20%] min-w-[240px] bg-white border-r px-5 py-6 flex-col">
+      <aside className="hidden md:flex w-[280px] shrink-0 bg-white border-r px-6 py-8 flex-col">
         <div className="mb-8">
           <p className="text-xs uppercase tracking-wide text-gray-400">
             Seller Panel
@@ -83,8 +83,8 @@ return (
       </aside>
 
       {/* MAIN CONTENT — 80% */}
-      <main className="w-full md:w-[80%] px-4 sm:px-6 lg:px-8 py-6">
-        <div className="max-w-6xl mx-auto">
+      <main className="flex-1 px-8 py-8">
+        <div className="max-w-7xl">
           <Outlet />
         </div>
       </main>
