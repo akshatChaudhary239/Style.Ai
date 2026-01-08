@@ -52,6 +52,28 @@ return (
   You’ve used <span className="text-white font-medium">{usedSlots}</span> out of{" "}
   <span className="text-white font-medium">{totalSlots}</span> slots
 </p>
+
+
+
+<div className="rounded-2xl bg-white p-6 border flex items-center justify-between">
+  <div>
+    <h3 className="text-lg font-semibold">
+      {availableSlots === 0
+        ? "Your slots are full"
+        : "You can add more products"}
+    </h3>
+    <p className="text-sm text-muted-foreground">
+      {availableSlots === 0
+        ? "Buy more slots to continue uploading products"
+        : `You have ${availableSlots} slot(s) available`}
+    </p>
+  </div>
+
+  <button className="rounded-xl bg-primary px-5 py-2 text-primary-foreground">
+    Buy Slots
+  </button>
+</div>
+
     {/* STATS */}
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
       <StatCard label="Total Slots" value={totalSlots} />
@@ -64,20 +86,12 @@ return (
     </div>
 
     {/* FUTURE / CTA */}
-    <div className="rounded-2xl border bg-white p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <div>
-        <h3 className="font-medium text-gray-900">
-          Ready to add more products?
-        </h3>
-        <p className="text-sm text-gray-500 mt-1">
-          Buy more slots to increase your store visibility.
-        </p>
-      </div>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6 opacity-60">
+  <div className="rounded-xl border p-5">Views (Coming soon)</div>
+  <div className="rounded-xl border p-5">Top Products</div>
+  <div className="rounded-xl border p-5">Buyer Interest</div>
+</div>
 
-      <button className="rounded-xl bg-primary px-4 py-2 text-primary-foreground hover:opacity-90 transition">
-        Buy Slots (coming soon)
-      </button>
-    </div>
 
   </div>
 );
