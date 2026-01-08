@@ -37,7 +37,7 @@ export default function BecomeSeller() {
         description: "Welcome to the seller dashboard",
       });
 
-      navigate("/seller/SellerDashboard");
+      navigate("/seller");
     } catch (err: unknown) {
   const message =
     err instanceof Error ? err.message : "Something went wrong";

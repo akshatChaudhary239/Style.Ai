@@ -76,7 +76,7 @@ function BuyerLayoutInner() {
                   Your style, simplified
                 </h3>
                 <p className="text-xs sm:text-sm text-gray-600 mt-1 max-w-xl">
-                  Tell Style.AI what you’re dressing for — we’ll take care of the rest.
+                  Go to the profile page and set your profile to get your own personalized recommendations.
                 </p>
               </div>
             </div>

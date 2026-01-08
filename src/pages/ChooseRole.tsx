@@ -39,7 +39,7 @@ export default function ChooseRole() {
   }
 
   async function chooseSeller() {
-    navigate("/become-seller");
+    navigate("/seller");
   }
 
   return (
