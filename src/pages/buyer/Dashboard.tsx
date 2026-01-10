@@ -75,7 +75,7 @@ function BuyerLayoutInner() {
                 <h3 className="text-sm sm:text-base font-semibold text-gray-900">
                   Your style, simplified
                 </h3>
-                <p className="text-xs sm:text-sm text-gray-600 mt-1 max-w-xl">
+                <p className="text-xs sm:text-sm text-gray-600 mt-2 max-w-xl">
                   Go to the profile page and set your profile to get your own personalized recommendations.
                 </p>
               </div>
