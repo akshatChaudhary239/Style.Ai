@@ -77,7 +77,7 @@ return (
           <NavItem to="/seller/help" icon={HelpCircle} label="Help & Support" />
         </nav>
 
-        <div className="border-t pt-4 text-sm text-gray-500">
+        <div className="border-t pt-5 text-sm text-gray-500">
           <p>Powered by Style.AI</p>
         </div>
       </aside>
