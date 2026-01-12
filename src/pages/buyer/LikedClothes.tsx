@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import RecommendationDetail from "@/pages/buyer/RecommendationDetail";
 import { Product } from "@/recommendation/types";
 
-/* TEMP MOCK — replace with Supabase later */
+/* TEMP MOCK will replace it with Supabase later */
 const MOCK_LIKED: Product[] = [
   {
     id: "1",
