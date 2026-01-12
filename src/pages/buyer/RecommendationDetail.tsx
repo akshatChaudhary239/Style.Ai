@@ -19,7 +19,7 @@ export default function RecommendationDetail({
       <div className="bg-white rounded-2xl w-full max-w-lg p-6 space-y-4 relative">
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+          className="absolute top-3 right-4 text-gray-400 hover:text-gray-600"
         >
           ✕
         </button>
