@@ -25,7 +25,7 @@ export default function Recommendations() {
         transition={{ duration: 0.4 }}
         className="max-w-2xl"
       >
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
+        <h1 className="text-4xl sm:text-3xl font-bold tracking-tight text-gray-900">
           Style.AI
         </h1>
         <p className="text-gray-600 mt-2 text-sm sm:text-base">
