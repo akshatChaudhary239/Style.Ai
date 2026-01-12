@@ -89,7 +89,7 @@ export default function LikedClothes() {
         ))}
       </div>
 
-      {/* Detail Modal */}
+      {/* Detail Model */}
       <AnimatePresence>
         {selected && (
           <RecommendationDetail
