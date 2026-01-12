@@ -105,7 +105,7 @@ className="
   );
 }
 
-/* Sidebar item */
+/* Sidebar items */
 function NavItem({
   to,
   label,
