@@ -9,7 +9,7 @@ function BuyerLayoutInner() {
       <AppNavbar />
 
       <div className="flex">
-        {/* SIDEBAR — DESKTOP ONLY */}
+        {/* SIDEBAR  DESKTOP ONLY */}
         <aside className="hidden md:flex w-[260px] min-h-[calc(100vh-56px)] bg-white border-r px-5 py-6 flex-col">
           {/* Brand */}
           <div className="mb-8">
@@ -82,7 +82,7 @@ function BuyerLayoutInner() {
             </div>
           </motion.div>
 
-          {/* PAGE CONTENT — MOBILE HERO */}
+          {/* PAGE CONTENT  MOBILE HERO */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
