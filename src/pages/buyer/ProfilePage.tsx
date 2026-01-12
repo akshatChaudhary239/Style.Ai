@@ -11,7 +11,7 @@ export default function ProfilePage() {
         w-full
         flex
         justify-center
-        px-2 sm:px-4
+        px-3 sm:px-4
         py-2
       "
     >
