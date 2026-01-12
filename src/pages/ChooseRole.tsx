@@ -60,7 +60,7 @@ export default function ChooseRole() {
           </p>
         </div>
 
-        {/* Role Cards */}
+        {/* Role Card */}
         <div className="grid grid-cols-1 gap-4">
           {/* Buyer */}
           <motion.button
