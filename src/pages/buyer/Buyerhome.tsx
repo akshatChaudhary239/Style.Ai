@@ -24,7 +24,7 @@ export default function BuyerHome() {
 
   return (
     <div className="w-full space-y-12">
-      {/* Context Badge */}
+      {/* Context Badges */}
       <ContextBadge
         draftContext={draftContext}
         appliedContext={appliedContext}
