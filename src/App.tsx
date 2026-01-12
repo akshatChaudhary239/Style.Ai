@@ -43,7 +43,7 @@ const App = () => (
     <Route path="/become-seller" element={<BecomeSeller />} />
     <Route path="/choose-role" element={<ChooseRole />} />
 
-    {/* BUYER ROUTES (NESTED CORRECTLY) */}
+    {/* BUYER ROUTES*/}
    <Route path="/buyer" element={<BuyerDashboard />}>
   <Route index element={<BuyerHome />} />
   <Route path="recommendations" element={<Recommendations />} />
