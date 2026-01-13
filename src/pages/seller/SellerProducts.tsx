@@ -82,7 +82,7 @@ export default function SellerProducts() {
         </button>
       </div>
 
-      {/* SLOT INFO */}
+      {/* SLOT INFORMATION */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <StatCard label="Total Slots" value={totalSlots} />
         <StatCard label="Used Slots" value={usedSlots} />
