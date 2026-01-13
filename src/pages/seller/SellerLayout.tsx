@@ -82,7 +82,7 @@ return (
         </div>
       </aside>
 
-      {/* MAIN CONTENT — 80% */}
+      {/* MAIN CONTENT*/}
       <main className="flex-1 px-8 py-8">
         <div className="max-w-7xl">
           <Outlet />
