@@ -11,10 +11,10 @@ from app.routers.payments import router as payments_router
 app.include_router(payments_router)
 
 
-# Allow frontend to call the backend
+# Allowing frontend to call the backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # change to your domain later
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
