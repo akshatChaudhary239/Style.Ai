@@ -17,7 +17,7 @@ async def recommend_handler(payload: dict):
         "budget": str
     }
     """
-    # Call our custom rule-based recommendation engine
+    # Calling our custom rule-based recommendation engine
     recommendation = recommend_outfit(payload)
 
     return {
