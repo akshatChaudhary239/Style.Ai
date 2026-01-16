@@ -12,7 +12,7 @@ router = APIRouter(prefix="/payments", tags=["payments"])
 # ---- Request Model ----
 class CreateOrderBody(BaseModel):
     pack_id: str
-    seller_id: str  # auth uid (seller_profile.id)
+    seller_id: str  # auth uuid (seller_profile.id)
 
 # ---- Create Order ----
 @router.post("/create-order")
