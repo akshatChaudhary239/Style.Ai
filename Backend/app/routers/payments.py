@@ -22,7 +22,7 @@ async def create_payment_order(body: CreateOrderBody):
     except ValueError:
         raise HTTPException(status_code=400, detail="Invalid pack")
 
-    # Create Razorpay order
+    # Create Razorpay orders
     order = create_order(
         amount_paise=pack["amount"],
         receipt=f"seller_{body.seller_id}"
