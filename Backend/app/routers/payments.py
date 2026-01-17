@@ -14,7 +14,7 @@ class CreateOrderBody(BaseModel):
     pack_id: str
     seller_id: str  # auth uuid (seller_profile.id)
 
-# ---- Create Order ----
+# ---- Create Orders ----
 @router.post("/create-order")
 async def create_payment_order(body: CreateOrderBody):
     try:
