@@ -252,7 +252,7 @@ return (
       </motion.div>
     )}
 
-    {/* Main Card */}
+    {/* Main Cards */}
     <motion.div
       layout
       className="bg-white rounded-3xl shadow-xl border border-border/50"
