@@ -9,7 +9,7 @@ from app.db.supabase import supabase_admin
 
 router = APIRouter(prefix="/payments", tags=["payments"])
 
-# ---- Request Model ----
+# ---- Request Models ----
 class CreateOrderBody(BaseModel):
     pack_id: str
     seller_id: str  # auth uuid (seller_profile.id)
