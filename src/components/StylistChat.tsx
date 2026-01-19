@@ -80,7 +80,7 @@ export default function StylistChat() {
                 </button>
               </div>
 
-              {/* Suggested Prompts */}
+              {/* Suggested Prompt */}
               <div className="flex flex-wrap gap-2 mb-4">
                 {SUGGESTED_PROMPTS.map((prompt) => (
                   <button
@@ -93,7 +93,7 @@ export default function StylistChat() {
                 ))}
               </div>
 
-              {/* Confirmation */}
+              {/* Confirmations */}
               <AnimatePresence>
                 {confirmation && (
                   <motion.div
