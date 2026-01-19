@@ -29,7 +29,7 @@ export default function StylistChat() {
 
   return (
     <>
-      {/* Floating Button */}
+      {/* Floating Buttons */}
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.97 }}
