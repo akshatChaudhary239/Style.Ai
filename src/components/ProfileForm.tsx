@@ -276,7 +276,7 @@ return (
       </CardHeader>
 
       <CardContent className="space-y-8 pt-6">
-        {/* Section: Measurements */}
+        {/* Section: Measurement */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -312,7 +312,7 @@ return (
           </div>
         </motion.div>
 
-        {/* Section: Body Type */}
+        {/* Section: Body Types */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
