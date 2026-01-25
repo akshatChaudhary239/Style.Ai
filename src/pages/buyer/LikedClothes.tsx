@@ -8,7 +8,7 @@ const MOCK_LIKED: Product[] = [
   {
     id: "1",
     name: "Traditional Kurta Set",
-    category: "ethnic",
+    category: "ethnics",
     colors: ["cream"],
     sizes: ["M", "L"],
     seller_id: "seller-1",
