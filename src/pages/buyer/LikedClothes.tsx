@@ -7,7 +7,7 @@ import { Product } from "@/recommendation/types";
 const MOCK_LIKED: Product[] = [
   {
     id: "1",
-    name: "Traditional Kurta Set",
+    name: "Traditional Kurta Sets",
     category: "ethnic",
     colors: ["cream"],
     sizes: ["M", "L"],
