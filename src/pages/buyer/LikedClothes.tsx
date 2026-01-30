@@ -15,7 +15,7 @@ const MOCK_LIKED: Product[] = [
   },
   {
     id: "2",
-    name: "Casual Oversized Tee",
+    name: "Casual Oversized Tees",
     category: "casual",
     colors: ["black"],
     sizes: ["L"],
