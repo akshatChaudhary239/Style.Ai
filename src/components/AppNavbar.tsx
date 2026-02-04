@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
@@ -25,17 +25,8 @@ export default function AppNavbar() {
   const [activeRole, setActiveRole] = useState<Role | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // 🔹 Fetch role when user is ready
-  useEffect(() => {
-    if (!user) {
-      setActiveRole(null);
-      return;
-    }
-
-    fetchActiveRole();
-  }, [user]);
-
-  async function fetchActiveRole() {
+  // ✅ Make function stable
+  const fetchActiveRole = useCallback(async () => {
     if (!user) return;
 
     const { data, error } = await supabase
@@ -44,10 +35,23 @@ export default function AppNavbar() {
       .eq("id", user.id)
       .single();
 
-    if (!error && (data?.active_role === "buyer" || data?.active_role === "seller")) {
+    if (
+      !error &&
+      (data?.active_role === "buyer" || data?.active_role === "seller")
+    ) {
       setActiveRole(data.active_role);
     }
-  }
+  }, [user]);
+
+  // 🔹 Fetch role when user is ready
+  useEffect(() => {
+    if (!user) {
+      setActiveRole(null);
+      return;
+    }
+
+    fetchActiveRole();
+  }, [user, fetchActiveRole]);
 
   async function switchRole() {
     if (!user || !activeRole) return;
@@ -63,7 +67,6 @@ export default function AppNavbar() {
     if (!error) {
       setActiveRole(newRole);
 
-      // 🔥 Navigate AFTER DB update
       navigate(newRole === "seller" ? "/seller/dashboard" : "/buyer", {
         replace: true,
       });
