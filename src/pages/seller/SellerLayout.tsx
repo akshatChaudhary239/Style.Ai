@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { Loader2, Package, BarChart3, HelpCircle } from "lucide-react";
-import AppNavbar from "@/components/AppNavbar";
 import type { LucideIcon } from "lucide-react";
+
+import AppNavbar from "@/components/AppNavbar";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 type NavItemProps = {
   to: string;
@@ -13,29 +15,31 @@ type NavItemProps = {
 
 export default function SellerLayout() {
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
+
   const [loading, setLoading] = useState(true);
   const [storeName, setStoreName] = useState("");
 
   useEffect(() => {
-    let mounted = true;
+    if (authLoading) return;
+
+    // ❌ Not logged in
+    if (!user) {
+      navigate("/auth", { replace: true });
+      return;
+    }
+
+    let cancelled = false;
 
     async function checkSeller() {
-      const { data: { user } } = await supabase.auth.getUser();
-
-      // ❌ Not logged in
-      if (!user) {
-        navigate("/auth", { replace: true });
-        return;
-      }
-
-      // 🔎 Check user role
+      // 🔎 Check role from profile
       const { data: profile, error: profileError } = await supabase
         .from("user_profiles")
         .select("active_role")
         .eq("id", user.id)
         .single();
 
-      // 🔥 Corrupted state (auth exists but profile missing)
+      // 🔥 Corrupted auth/profile → HARD RESET
       if (profileError || !profile) {
         await supabase.auth.signOut();
         navigate("/auth", { replace: true });
@@ -48,20 +52,19 @@ export default function SellerLayout() {
         return;
       }
 
-      // 🔎 Check seller profile
+      // 🔎 Fetch seller profile
       const { data: seller, error: sellerError } = await supabase
         .from("seller_profile")
         .select("store_name")
         .eq("id", user.id)
         .single();
 
-      // ❌ Seller profile missing
       if (sellerError || !seller) {
         navigate("/", { replace: true });
         return;
       }
 
-      if (!mounted) return;
+      if (cancelled) return;
 
       setStoreName(seller.store_name);
       setLoading(false);
@@ -70,11 +73,12 @@ export default function SellerLayout() {
     checkSeller();
 
     return () => {
-      mounted = false;
+      cancelled = true;
     };
-  }, [navigate]);
+  }, [user, authLoading, navigate]);
 
-  if (loading) {
+  // 🔄 Unified loader (auth + role)
+  if (authLoading || loading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
@@ -87,7 +91,6 @@ export default function SellerLayout() {
       <AppNavbar />
 
       <div className="min-h-[calc(100vh-56px)] bg-slate-50 flex">
-        
         {/* SIDEBAR */}
         <aside className="w-[280px] shrink-0 bg-white border-r px-6 py-8 flex flex-col">
           <div className="mb-8">
