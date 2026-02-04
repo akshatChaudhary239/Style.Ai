@@ -21,7 +21,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let mounted = true;
 
-    // 1️⃣ Get initial session ONCE
+    // 🔹 Initial session
     supabase.auth.getSession().then(({ data }) => {
       if (!mounted) return;
       setSession(data.session);
@@ -29,12 +29,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false);
     });
 
-    // 2️⃣ Listen for future auth changes
-    const { data: { subscription } } =
-      supabase.auth.onAuthStateChange((_event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-      });
+    // 🔹 Auth state changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!mounted) return;
+
+      setLoading(true);              // 🔥 IMPORTANT
+      setSession(session);
+      setUser(session?.user ?? null);
+      setLoading(false);             // 🔥 IMPORTANT
+    });
 
     return () => {
       mounted = false;
@@ -43,18 +48,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signUp = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+    const { error } = await supabase.auth.signUp({ email, password });
     return { error: error ? new Error(error.message) : null };
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
     return { error: error ? new Error(error.message) : null };
   };
 
@@ -63,7 +62,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, signUp, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{ user, session, loading, signUp, signIn, signOut }}
+    >
       {children}
     </AuthContext.Provider>
   );
