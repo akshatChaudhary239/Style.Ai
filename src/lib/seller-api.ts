@@ -1,6 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 
 export interface BecomeSellerInput {
+  
   store_name: string;
   business_type: string;
   location: string;

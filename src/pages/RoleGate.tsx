@@ -39,7 +39,7 @@ export default function RoleGate() {
       if (profile.active_role === "buyer") {
         navigate("/buyer", { replace: true });
       } else {
-        navigate("/seller/Sellerdashboard", { replace: true });
+        navigate("/seller/dashboard", { replace: true });
       }
     }
 
