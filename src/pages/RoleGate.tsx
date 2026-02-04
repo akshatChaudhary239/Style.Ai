@@ -28,7 +28,7 @@ export default function RoleGate() {
       if (data.active_role === "buyer") {
         navigate("/profile", { replace: true });
       } else {
-        navigate("/seller/SellerDashboard", { replace: true });
+        navigate("/seller/dashboard", { replace: true });
       }
     }
 
