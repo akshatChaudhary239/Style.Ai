@@ -26,10 +26,18 @@ export default function SellerLayout() {
         .eq("id", user.id)
         .single();
 
-      if (profile?.active_role !== "seller") {
-        navigate("/", { replace: true });
-        return;
-      }
+if (!profile) {
+  setLoading(false);
+  navigate("/", { replace: true });
+  return;
+}
+
+if (profile.active_role !== "seller") {
+  setLoading(false);
+  navigate("/", { replace: true });
+  return;
+}
+
 
       const { data: seller } = await supabase
         .from("seller_profile")

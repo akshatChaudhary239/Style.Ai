@@ -1,4 +1,3 @@
-import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -14,46 +13,47 @@ import {
   LayoutDashboard,
 } from "lucide-react";
 
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+
 type Role = "buyer" | "seller";
 
 export default function AppNavbar() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
   const [activeRole, setActiveRole] = useState<Role | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // 🔹 Fetch role when user is ready
   useEffect(() => {
+    if (!user) {
+      setActiveRole(null);
+      return;
+    }
+
     fetchActiveRole();
-  }, []);
+  }, [user]);
 
   async function fetchActiveRole() {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
     if (!user) return;
 
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("user_profiles")
       .select("active_role")
       .eq("id", user.id)
       .single();
 
-    if (data?.active_role === "buyer" || data?.active_role === "seller") {
+    if (!error && (data?.active_role === "buyer" || data?.active_role === "seller")) {
       setActiveRole(data.active_role);
     }
   }
 
   async function switchRole() {
-    if (!activeRole) return;
+    if (!user || !activeRole) return;
 
     setLoading(true);
     const newRole: Role = activeRole === "seller" ? "buyer" : "seller";
-
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) return;
 
     const { error } = await supabase
       .from("user_profiles")
@@ -62,7 +62,11 @@ export default function AppNavbar() {
 
     if (!error) {
       setActiveRole(newRole);
-      navigate(newRole === "seller" ? "/seller" : "/buyer");
+
+      // 🔥 Navigate AFTER DB update
+      navigate(newRole === "seller" ? "/seller/dashboard" : "/buyer", {
+        replace: true,
+      });
     }
 
     setLoading(false);
@@ -70,7 +74,7 @@ export default function AppNavbar() {
 
   async function logout() {
     await supabase.auth.signOut();
-    navigate("/auth");
+    navigate("/auth", { replace: true });
   }
 
   return (
@@ -81,10 +85,11 @@ export default function AppNavbar() {
       className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur"
     >
       <div className="h-14 px-4 sm:px-6 flex items-center justify-between">
+        
         {/* LEFT — BRAND */}
         <button
           onClick={() =>
-            navigate(activeRole === "seller" ? "/seller" : "/buyer")
+            navigate(activeRole === "seller" ? "/seller/dashboard" : "/buyer")
           }
           className="flex items-center gap-2 font-semibold text-lg tracking-tight"
         >
@@ -92,19 +97,19 @@ export default function AppNavbar() {
           <span>Style.AI</span>
         </button>
 
-        {/* CENTER — NAV (hidden on mobile) */}
+        {/* CENTER — NAV */}
         <div className="hidden md:flex items-center gap-1 rounded-full bg-muted p-1">
           {activeRole === "seller" && (
             <>
               <NavPill
                 label="Dashboard"
                 icon={LayoutDashboard}
-                onClick={() => navigate("/seller/SellerDashboard")}
+                onClick={() => navigate("/seller/dashboard")}
               />
               <NavPill
                 label="Products"
                 icon={Store}
-                onClick={() => navigate("/seller/productLists")}
+                onClick={() => navigate("/seller/products")}
               />
             </>
           )}
@@ -135,9 +140,7 @@ export default function AppNavbar() {
               className="flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm hover:bg-muted transition"
             >
               <RefreshCcw
-                className={`h-4 w-4 ${
-                  loading ? "animate-spin" : ""
-                }`}
+                className={`h-4 w-4 ${loading ? "animate-spin" : ""}`}
               />
               <span className="hidden sm:inline">
                 Switch to {activeRole === "seller" ? "Buyer" : "Seller"}
@@ -169,7 +172,6 @@ function NavPill({
   icon: LucideIcon;
   onClick: () => void;
 }) {
-
   return (
     <motion.button
       whileHover={{ scale: 1.05 }}

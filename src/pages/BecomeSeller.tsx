@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { becomeSeller } from "@/lib/seller-api";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function BecomeSeller() {
   const { user } = useAuth();
@@ -32,12 +33,19 @@ export default function BecomeSeller() {
         location,
       });
 
+
       toast({
         title: "Seller account created ✔",
         description: "Welcome to the seller dashboard",
       });
+      await supabase
+  .from("user_profiles")
+  .update({ active_role: "seller" })
+  .eq("id", user.id);
 
-      navigate("/seller/SellerDashboard");
+
+      navigate("/seller/dashboard", { replace: true });
+
     } catch (err: unknown) {
   const message =
     err instanceof Error ? err.message : "Something went wrong";
