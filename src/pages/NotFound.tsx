@@ -12,12 +12,12 @@ const NotFound = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted">
       <div className="text-center">
-        <h1 className="mb-5 text-4xl font-bold">404</h1>
-        <p className="mb-4 text-2xl text-muted-foreground">Oops! Page not found</p>
-        <a href="/" className="text-primary underline hover:text-primary/90">
-          Home
+        <h1 className="mb-5 text-4xl font-bold">HEY THERE </h1>
+        <p className="mb-4 text-2xl text-muted-foreground">WELCOME TO STYLE.AI</p>
+        <a href="/" className="text-primary  uppercase">
+         click here to go to the DASHBOARD
         </a>
-        <button onClick={() => navigate("/buyer")}>Go to Dashboard</button>
+        <button className="text-primary underline hover:text-primary/90 " onClick={() => navigate("/buyer")}>Go to Dashboard</button>
 
       </div>
     </div>
