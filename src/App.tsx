@@ -52,13 +52,15 @@ const App = () => (
   <Route path="Profile" element={<ProfilePage/>} /> 
 </Route>
 
+
 {/* Seller routes */}
 <Route path="/seller" element={<SellerLayout />}>
   <Route index element={<SellerDashboard />} />
-  <Route path="/seller/dashboard" element={<SellerDashboard />} />
+  <Route path="dashboard" element={<SellerDashboard />} />
   <Route path="products" element={<SellerProducts />} />
   <Route path="help" element={<SellerHelpSupport />} />
 </Route>
+
 
 
     <Route path="*" element={<NotFound />} />
