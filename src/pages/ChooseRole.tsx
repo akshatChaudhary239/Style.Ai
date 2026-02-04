@@ -35,11 +35,11 @@ export default function ChooseRole() {
       return;
     }
 
-    navigate("/buyer");
+    navigate("/profile");
   }
 
   async function chooseSeller() {
-    navigate("/seller/dashboard");
+    navigate("/seller");
   }
 
   return (
