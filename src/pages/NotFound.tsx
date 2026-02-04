@@ -14,10 +14,11 @@ const NotFound = () => {
       <div className="text-center">
         <h1 className="mb-5 text-4xl font-bold">HEY THERE </h1>
         <p className="mb-4 text-2xl text-muted-foreground">WELCOME TO STYLE.AI</p>
-        <a href="/" className="text-primary  uppercase">
+        <a href="/" className="text-gray-700 uppercase">
          click here to go to the DASHBOARD
         </a>
-        <button className="text-primary underline hover:text-primary/90 " onClick={() => navigate("/buyer")}>Go to Dashboard</button>
+        <br />
+        <button className="text-primary underline hover:text-primary/90 " onClick={() => navigate("/buyer")}>Dashboard</button>
 
       </div>
     </div>
