@@ -9,24 +9,32 @@ export default function RoleGate() {
   useEffect(() => {
     async function decide() {
       const { data: { user } } = await supabase.auth.getUser();
+
       if (!user) {
         navigate("/auth", { replace: true });
         return;
       }
 
-      const { data, error } = await supabase
+      const { data: profile, error } = await supabase
         .from("user_profiles")
         .select("active_role")
         .eq("id", user.id)
         .single();
 
-      if (error || !data?.active_role) {
+      // 🔥 HARD FAIL FOR CORRUPTED STATE
+      if (error || !profile) {
+        await supabase.auth.signOut();
+        navigate("/auth", { replace: true });
+        return;
+      }
+
+      if (!profile.active_role) {
         navigate("/choose-role", { replace: true });
         return;
       }
 
-      if (data.active_role === "buyer") {
-        navigate("/profile", { replace: true });
+      if (profile.active_role === "buyer") {
+        navigate("/buyer", { replace: true });
       } else {
         navigate("/seller/dashboard", { replace: true });
       }

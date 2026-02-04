@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Loader2, Package, BarChart3, HelpCircle } from "lucide-react";
 import AppNavbar from "@/components/AppNavbar";
 import type { LucideIcon } from "lucide-react";
+
 type NavItemProps = {
   to: string;
   label: string;
@@ -16,42 +17,61 @@ export default function SellerLayout() {
   const [storeName, setStoreName] = useState("");
 
   useEffect(() => {
+    let mounted = true;
+
     async function checkSeller() {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return navigate("/auth", { replace: true });
 
-      const { data: profile } = await supabase
+      // ❌ Not logged in
+      if (!user) {
+        navigate("/auth", { replace: true });
+        return;
+      }
+
+      // 🔎 Check user role
+      const { data: profile, error: profileError } = await supabase
         .from("user_profiles")
         .select("active_role")
         .eq("id", user.id)
         .single();
 
-if (!profile) {
-  setLoading(false);
-  navigate("/", { replace: true });
-  return;
-}
+      // 🔥 Corrupted state (auth exists but profile missing)
+      if (profileError || !profile) {
+        await supabase.auth.signOut();
+        navigate("/auth", { replace: true });
+        return;
+      }
 
-if (profile.active_role !== "seller") {
-  setLoading(false);
-  navigate("/", { replace: true });
-  return;
-}
+      // ❌ Not a seller
+      if (profile.active_role !== "seller") {
+        navigate("/", { replace: true });
+        return;
+      }
 
-
-      const { data: seller } = await supabase
+      // 🔎 Check seller profile
+      const { data: seller, error: sellerError } = await supabase
         .from("seller_profile")
         .select("store_name")
         .eq("id", user.id)
         .single();
 
-      if (!seller) return navigate("/", { replace: true });
+      // ❌ Seller profile missing
+      if (sellerError || !seller) {
+        navigate("/", { replace: true });
+        return;
+      }
+
+      if (!mounted) return;
 
       setStoreName(seller.store_name);
       setLoading(false);
     }
 
     checkSeller();
+
+    return () => {
+      mounted = false;
+    };
   }, [navigate]);
 
   if (loading) {
@@ -62,44 +82,43 @@ if (profile.active_role !== "seller") {
     );
   }
 
-return (
-  <>
-    <AppNavbar />
+  return (
+    <>
+      <AppNavbar />
 
-    <div className="min-h-[calc(100vh-56px)] bg-slate-50 flex">
-      
-      {/* SIDEBAR — 20% */}
-      <aside className="lex w-[280px] shrink-0 bg-white border-r px-6 py-8 flex-col">
-        <div className="mb-8">
-          <p className="text-xs uppercase tracking-wide text-gray-400">
-            Seller Panel
-          </p>
-          <h2 className="text-xl font-semibold text-gray-900 truncate">
-            {storeName}
-          </h2>
-        </div>
+      <div className="min-h-[calc(100vh-56px)] bg-slate-50 flex">
+        
+        {/* SIDEBAR */}
+        <aside className="w-[280px] shrink-0 bg-white border-r px-6 py-8 flex flex-col">
+          <div className="mb-8">
+            <p className="text-xs uppercase tracking-wide text-gray-400">
+              Seller Panel
+            </p>
+            <h2 className="text-xl font-semibold text-gray-900 truncate">
+              {storeName}
+            </h2>
+          </div>
 
-        <nav className="flex flex-col gap-2 flex-1">
-          <NavItem to="/seller/dashboard" icon={BarChart3} label="Dashboard" />
-          <NavItem to="/seller/products" icon={Package} label="Products" />
-          <NavItem to="/seller/help" icon={HelpCircle} label="Help & Support" />
-        </nav>
+          <nav className="flex flex-col gap-2 flex-1">
+            <NavItem to="/seller/dashboard" icon={BarChart3} label="Dashboard" />
+            <NavItem to="/seller/products" icon={Package} label="Products" />
+            <NavItem to="/seller/help" icon={HelpCircle} label="Help & Support" />
+          </nav>
 
-        <div className="border-t pt-5 text-sm text-gray-500">
-          <p>Powered by Style.AI</p>
-        </div>
-      </aside>
+          <div className="border-t pt-5 text-sm text-gray-500">
+            <p>Powered by Style.AI</p>
+          </div>
+        </aside>
 
-      {/* MAIN CONTENT*/}
-      <main className="flex-1 px-8 py-8">
-        <div className="max-w-7xl">
-          <Outlet />
-        </div>
-      </main>
-    </div>
-  </>
-);
-
+        {/* MAIN CONTENT */}
+        <main className="flex-1 px-8 py-8">
+          <div className="max-w-7xl">
+            <Outlet />
+          </div>
+        </main>
+      </div>
+    </>
+  );
 }
 
 function NavItem({ to, icon: Icon, label }: NavItemProps) {
