@@ -10,7 +10,7 @@ export default function HomeGate() {
   useEffect(() => {
     if (!loading) {
       if (user) {
-        navigate("/seller/dashboard", { replace: true });
+        navigate("/*", { replace: true });
       } else {
         navigate("/auth", { replace: true });
       }
