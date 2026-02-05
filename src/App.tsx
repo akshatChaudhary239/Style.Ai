@@ -10,7 +10,7 @@ import NotFound from "./pages/NotFound";
 // import Recommendation from "../src/pages/Recommendations";
 import BecomeSeller from "./pages/BecomeSeller";
 import ChooseRole from "./pages/ChooseRole";
-import RoleGate from "./pages/RoleGate";
+
 import SellerDashboard from "./pages/seller/SellerDashboard";
 import HomeGate from "./pages/HomeGate";
 import BuyerDashboard from "./pages/buyer/Dashboard";
@@ -36,7 +36,8 @@ const App = () => (
   <Routes>
     <Route path="/" element={<HomeGate />} />
     <Route path="/auth" element={<Auth />} />
-    <Route path="/app" element={<RoleGate />} />
+    <Route path="/app" element={<HomeGate />} />
+
     <Route path="/index" element={<Index />} />
     {/* <Route path="/seller/SellerDashboard" element={<SellerDashboard />} /> */}
     {/* <Route path="/seller/SellerHelpSupport" element={<SellerHelpSupport />} /> */}
