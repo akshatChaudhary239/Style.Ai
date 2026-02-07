@@ -1,73 +1,134 @@
-# Welcome to your Lovable project
+👗 Style.AI  Intelligent Fashion Discovery & Seller Platform
+Overview
 
-## Project info
+Style.AI is a full stack fashion intelligence platform that connects buyers with relevant clothing options while enabling local sellers to manage and showcase their inventory efficiently.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+The platform combines user profiling, rule based recommendation intelligence, and a scalable seller listing system to solve a core problem in fashion commerce:
+poor personalization and low discoverability of local inventory.
 
-## How can I edit this code?
+**Problem Statement**
 
-There are several ways of editing your application.
+Fashion platforms face two major challenges:
 
-**Use Lovable**
+**For Buyers**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+~ Generic recommendations that ignore body type, preferences, and context
 
-Changes made via Lovable will be committed automatically to this repo.
+~ Overwhelming choices with little explainability
 
-**Use your preferred IDE**
+~ Low confidence in styling decisions
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+**For Sellers**
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+~ Limited visibility for local and small sellers
 
-Follow these steps:
+~ No structured way to manage listings efficiently
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+~ Inefficient onboarding and inventory control
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+~ Traditional marketplaces treat fashion like a catalog problem , Style.AI treats it as a personalization and decision problem.
 
-# Step 3: Install the necessary dependencies.
-npm i
+**Solution Architecture**
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+_**~ Style.AI is designed as a role-based, data-driven system with clear separation of concerns.**_
 
-**Edit a file directly in GitHub**
+**Buyer Side (Intelligence Layer)**
+<img width="1892" height="932" alt="image" src="https://github.com/user-attachments/assets/24c9a7a9-d520-4e7c-bed9-0375bb3836c9" />
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+~ User profiling captures body metrics, style preferences, and context
 
-**Use GitHub Codespaces**
+**A rule-based recommendation engine (V1) scores clothing items based on:**
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+~ Fit relevance
 
-## What technologies are used for this project?
+~ Style compatibility
 
-This project is built with:
+~ Contextual alignment
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+~ Recommendations are explainable, not black-box
 
-## How can I deploy this project?
+~ Users can preview, compare, and refine recommendations dynamically
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+**Seller Side (Platform Layer)**
+![style ai photo](https://github.com/user-attachments/assets/d941c05f-b670-4317-bea7-1507558bef24)
 
-## Can I connect a custom domain to my Lovable project?
 
-Yes, you can!
+~ Secure seller onboarding with role-based access
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+~ Slot-based product listing system:
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+~ Active listings consume slots
+
+~ Draft listings do not
+
+~ Publishing / unpublishing dynamically manages capacity
+
+**Product lifecycle management:**
+![style ai ](https://github.com/user-attachments/assets/a9622de9-db88-4eb9-aed8-3fc1e876661b)
+
+
+~ Create, edit, publish, unpublish, delete
+
+~ Image handling via cloud storage with strict limits and validation
+
+**Why Style.AI Is Different**
+
+~ Explainable recommendations instead of opaque AI outputs
+
+~ Database-enforced business rules (slots, product status) to prevent abuse
+
+~ Role-based architecture supporting buyers and sellers in one system
+
+~ Scalable foundation for future ML, payments, and analytics
+
+~ Most fashion apps focus only on frontend experience — **Style.AI prioritizes correctness, data integrity, and long-term scalability.**
+![style](https://github.com/user-attachments/assets/9bf205c2-5b22-41f9-897c-b49c67ffefe2)
+
+
+**Tech Stack**
+
+~ Frontend: React, TypeScript, Tailwind CSS, Framer Motion
+
+~ Backend: Supabase (Auth, Postgres, Storage, RLS)
+
+~ Architecture: Role-based access, DB-level constraints & triggers
+
+~ State Management: Context-based applied vs draft states
+
+**Key Features**
+
+~ Buyer & Seller role switching
+
+~ Rule-based recommendation engine (V1)
+
+~ Seller dashboard with slot management
+
+~ Secure product lifecycle handling
+
+~ Cloud image storage with constraints
+
+~ Scalable schema designed for future ML integration
+
+~ Current Status
+
+~ Buyer recommendation system: ✅ Stable
+
+~ Seller dashboard & product management: ✅ Complete
+
+~ Payment integration & ML upgrade: 🔜 Planned
+
+**Future Roadmap**
+
+~ ML-based recommendation enhancement
+
+~ Hyperlocal product discovery
+
+~ Seller analytics & performance insights
+
+~ Payment integration for listing capacity
+
+~ Automated data-driven personalization
+
+**Impact**
+
+Style.AI demonstrates how data, system design, and UX can work together to build a realistic, production-ready platform not just a prototype.
