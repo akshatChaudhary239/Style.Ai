@@ -2,103 +2,74 @@ import AppNavbar from "@/components/AppNavbar";
 import { Outlet, NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
 import { StyleContextProvider } from "@/context/StyleContext";
+import { useRef, useEffect } from "react";
+import gsap from "gsap";
 
 function BuyerLayoutInner() {
+  const sidebarRef = useRef(null);
+  const contentRef = useRef(null);
+
+  useEffect(() => {
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+    tl.from(sidebarRef.current, {
+      x: -50,
+      opacity: 0,
+      duration: 1,
+    })
+      .from(contentRef.current, {
+        y: 20,
+        opacity: 0,
+        duration: 0.8,
+      }, "-=0.6");
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100">
+    <div className="min-h-screen bg-white text-black font-body selection:bg-black selection:text-white">
       <AppNavbar />
 
-      <div className="flex">
+      <div className="flex pt-16 lg:pt-20">
         {/* SIDEBAR  DESKTOP ONLY */}
-        <aside className="hidden md:flex w-[260px] min-h-[calc(100vh-56px)] bg-white border-r px-5 py-6 flex-col">
-          {/* Brand */}
-          <div className="mb-8">
-            <p className="text-xs uppercase tracking-wide text-gray-400">
-              Personal Stylist
+        <aside
+          ref={sidebarRef}
+          className="hidden lg:flex w-[300px] h-[calc(100vh-80px)] bg-black text-white p-10 flex-col sticky top-20 border-r border-white/10"
+        >
+          {/* Brand/Indicator */}
+          <div className="mb-12">
+            <p className="text-[10px] uppercase tracking-[0.3em] text-white/40 mb-2 font-display">
+              Management
             </p>
-            <h2 className="text-xl font-semibold text-gray-900">
+            <h2 className="text-2xl font-display font-bold tracking-tighter">
               Style.AI
             </h2>
           </div>
 
           {/* Navigation */}
-          <nav className="flex flex-col gap-2 flex-1">
-            <NavItem to="/buyer" label="Home" icon="🏠" end />
-            <NavItem to="/buyer/recommendations" label="Style.AI" icon="🧠" />
-            <NavItem to="/buyer/liked" label="Liked Clothes" icon="❤️" />
-            <NavItem to="/buyer/Profile" label="Profile" icon="🧍" />
-            <NavItem to="/buyer/Help" label="Help & support" icon="❓" />
+          <nav className="flex flex-col gap-6 flex-1">
+            <NavItem to="/buyer" label="Overview" end />
+            <NavItem to="/buyer/recommendations" label="Insights" />
+            <NavItem to="/buyer/liked" label="Favorites" />
+            <NavItem to="/buyer/Profile" label="Identity" />
+            <NavItem to="/buyer/Help" label="Assistance" />
           </nav>
 
-          {/* Footer */}
-
+          {/* Luxury Indicator */}
+          <div className="mt-auto pt-10 border-t border-white/10 opacity-30">
+            <p className="text-[10px] uppercase tracking-widest leading-relaxed">
+              Precision Crafted <br /> by Style.AI
+            </p>
+          </div>
         </aside>
 
         {/* MAIN AREA */}
-<main
-  className="
-    flex-1
-    w-full
-    px-3
-    sm:px-6
-    lg:px-8
-    py-4
-    sm:py-6
-    space-y-5
-  "
->
-
-          {/* SOFT BANNER */}
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35 }}
-            className="
-              rounded-xl
-              border
-              bg-gradient-to-r from-slate-100 to-gray-50
-              p-3 sm:p-5
-              shadow-sm
-            "
-          >
-            <div className="flex items-start gap-3">
-              <motion.span
-                initial={{ scale: 0.9 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.15 }}
-                className="text-lg"
-              >
-                ✨
-              </motion.span>
-
-              <div>
-                <h3 className="text-sm sm:text-base font-semibold text-gray-900">
-                  Your style, simplified
-                </h3>
-                <p className="text-xs sm:text-sm text-gray-600 mt-2 max-w-xl">
-                  Go to the profile page and set your profile to get your own personalized recommendations.
-                </p>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* PAGE CONTENT  MOBILE HERO */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-className="
-  bg-white
-  rounded-2xl
-  p-4 sm:p-6
-  shadow-md
-  min-h-[60vh]
-  w-full
-  lg:max-w-none
-"
->
+        <main
+          ref={contentRef}
+          className="flex-1 w-full px-6 md:px-12 lg:px-16 py-8 sm:py-12 min-h-screen bg-[#fafafa]"
+        >
+          {/* CONTENT WRAPPER */}
+          <div className="max-w-[1400px] mx-auto">
             <Outlet />
-          </motion.div>
+          </div>
         </main>
       </div>
     </div>
@@ -109,12 +80,10 @@ className="
 function NavItem({
   to,
   label,
-  icon,
   end,
 }: {
   to: string;
   label: string;
-  icon: string;
   end?: boolean;
 }) {
   return (
@@ -123,17 +92,16 @@ function NavItem({
       end={end}
       className={({ isActive }) =>
         `
-        flex items-center gap-3 px-3 py-2 rounded-lg transition
-        ${
-          isActive
-            ? "bg-gray-800 text-white font-medium"
-            : "text-gray-700 hover:bg-gray-100"
+        group flex items-center justify-between py-2 text-sm tracking-widest uppercase transition-all duration-300
+        ${isActive
+          ? "text-white font-bold translate-x-2"
+          : "text-white/40 hover:text-white"
         }
       `
       }
     >
-      <span className="text-lg">{icon}</span>
       <span>{label}</span>
+      <span className={`w-1 h-1 rounded-full bg-white transition-opacity duration-300 group-hover:opacity-100 ${({ isActive }: any) => isActive ? 'opacity-100' : 'opacity-0'}`}></span>
     </NavLink>
   );
 }

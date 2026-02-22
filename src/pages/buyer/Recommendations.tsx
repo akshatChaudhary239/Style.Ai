@@ -1,8 +1,9 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useStyleContext } from "@/context/StyleContext";
 import ContextBadge from "./ContextBadge";
 import StylistChat from "@/components/StylistChat";
+import gsap from "gsap";
 
 import { recommendProducts } from "@/recommendation/recommendProducts";
 import RecommendationDetail from "./RecommendationDetail";
@@ -14,132 +15,126 @@ export default function Recommendations() {
   const [selectedRec, setSelectedRec] =
     useState<RecommendationItem | null>(null);
 
+  const containerRef = useRef(null);
   const recommendations = recommendProducts([], appliedContext);
 
-  return (
-    <div className="space-y-12">
-      {/* HEADER */}
-      <motion.div
-        initial={{ opacity: 0, y: 14 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="max-w-2xl"
-      >
-        <h1 className="text-4xl sm:text-3xl font-bold tracking-tight text-gray-900">
-          Style.AI
-        </h1>
-        <p className="text-gray-600 mt-2 text-sm sm:text-base">
-          I analyze your intent, preferences, and context to find what truly fits you.
-        </p>
-      </motion.div>
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(".reveal-rec", {
+        y: 40,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.15,
+        ease: "power4.out"
+      });
+    }, containerRef);
+    return () => ctx.revert();
+  }, []);
 
-      {/* INTENT SETTER */}
-      <StylistChat />
+  return (
+    <div ref={containerRef} className="space-y-24 py-10">
+      {/* HEADER */}
+      <section className="reveal-rec space-y-6 max-w-4xl">
+        <p className="text-[10px] uppercase tracking-[0.4em] text-black/40 font-display">Intelligence / Engine</p>
+        <h1 className="text-7xl md:text-8xl font-display font-black tracking-tighter uppercase leading-[0.8] text-black">
+          Style.AI <br />
+          <span className="text-black/10">Insights</span>
+        </h1>
+        <p className="text-xl text-black/60 font-light leading-relaxed max-w-2xl">
+          Our recommendation engine decodes your aesthetic identity.
+          By cross-referencing your profile with real-time trends, we've identified these strategic pieces.
+        </p>
+      </section>
+
+      {/* INTENT SETTER (SYLIST CHAT) */}
+      <div className="reveal-rec">
+        <StylistChat />
+      </div>
 
       {/* CONTEXT BADGE */}
-      <ContextBadge
-        draftContext={draftContext}
-        appliedContext={appliedContext}
-        onApply={applyContext}
-        onEdit={() => {}}
-      />
+      <div className="reveal-rec">
+        <ContextBadge
+          draftContext={draftContext}
+          appliedContext={appliedContext}
+          onApply={applyContext}
+          onEdit={() => { }}
+        />
+      </div>
 
       {/* RESULTS */}
-      <section className="space-y-5">
-        <h2 className="text-lg font-semibold text-gray-900">
-          Your best matches today
-        </h2>
+      <section className="space-y-12">
+        <div className="reveal-rec flex justify-between items-end border-b border-black pb-4">
+          <h2 className="text-2xl font-display font-bold uppercase tracking-tighter">
+            Analytical Matches
+          </h2>
+          <p className="text-[10px] uppercase tracking-widest text-black/40">Evaluation Complete</p>
+        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {recommendations.map((rec, index) => (
-            <motion.div
+            <div
               key={rec.product.id}
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.06 }}
-              whileHover={{ y: -6, scale: 1.01 }}
-              whileTap={{ scale: 0.98 }}
               onClick={() => setSelectedRec(rec)}
-              className="
-                relative
-                cursor-pointer
-                rounded-3xl
-                border
-                bg-white/80
-                backdrop-blur
-                p-5 sm:p-6
-                shadow-lg
-                hover:shadow-xl
-                transition
-              "
+              className="reveal-rec group relative cursor-pointer bg-white border border-black/5 p-10 hover:border-black/20 transition-all duration-500 overflow-hidden"
             >
-              {/* Glow */}
-              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-200/40 to-sky-200/40 blur-xl -z-10" />
+              {/* Background Number */}
+              <span className="absolute -top-10 -right-4 text-[12rem] font-display font-black text-black/[0.02] select-none group-hover:text-black/[0.05] transition-colors duration-500">
+                0{index + 1}
+              </span>
 
-              {/* Confidence Pill */}
-              <div
-                className={`
-                  absolute top-4 right-4
-                  text-xs font-medium
-                  px-3 py-1 rounded-full
-                  ${
-                    rec.confidence === "high"
-                      ? "bg-green-100 text-green-700"
-                      : rec.confidence === "medium"
-                      ? "bg-blue-100 text-blue-700"
-                      : "bg-gray-100 text-gray-600"
-                  }
-                `}
-              >
-                {rec.confidence.toUpperCase()} CONFIDENCE
+              {/* Confidence Indicator */}
+              <div className="flex items-center gap-2 mb-8">
+                <div className={`w-2 h-2 rounded-full ${rec.confidence === "high" ? "bg-black" : "bg-black/30"
+                  }`} />
+                <span className="text-[10px] uppercase tracking-[0.2em] font-bold">
+                  {rec.confidence} Confidence Ranking
+                </span>
               </div>
 
-              {/* Product */}
-              <h3 className="font-semibold text-lg text-gray-900">
-                {rec.product.name}
-              </h3>
+              {/* Product Info */}
+              <div className="space-y-6 relative z-10">
+                <h3 className="text-4xl font-display font-bold uppercase tracking-tighter leading-none group-hover:translate-x-2 transition-transform duration-500">
+                  {rec.product.name}
+                </h3>
 
-              {/* Reasons */}
-              <div className="mt-3 space-y-1">
-                {rec.reasons.slice(0, 3).map((reason, i) => (
-                  <p
-                    key={i}
-                    className="text-sm text-gray-700 flex gap-2"
-                  >
-                    <span className="text-green-600">✔</span>
-                    {reason}
-                  </p>
-                ))}
+                <div className="space-y-3 pt-4 border-t border-black/10">
+                  <p className="text-[10px] uppercase tracking-widest text-black/40 mb-4">Strategic Rationale</p>
+                  {rec.reasons.slice(0, 3).map((reason, i) => (
+                    <p
+                      key={i}
+                      className="text-sm text-black/60 font-light flex items-start gap-4"
+                    >
+                      <span className="w-1.5 h-1.5 bg-black/10 mt-1.5 flex-shrink-0" />
+                      {reason}
+                    </p>
+                  ))}
+                </div>
+
+                <p className="text-lg text-black/80 font-light italic leading-relaxed pt-4 border-t border-black/5">
+                  “{rec.opinion}”
+                </p>
+
+                <div className="pt-8">
+                  <span className="text-[10px] uppercase tracking-[0.3em] font-black border-b border-black pb-2 group-hover:pr-4 transition-all duration-300">
+                    View Full Analysis
+                  </span>
+                </div>
               </div>
-
-              {/* Opinion */}
-              <p className="mt-4 text-sm text-gray-600 italic leading-relaxed">
-                “{rec.opinion}”
-              </p>
-
-              {/* CTA */}
-              <p className="mt-5 text-sm font-medium text-blue-700 underline underline-offset-4">
-                View full reasoning →
-              </p>
-            </motion.div>
+            </div>
           ))}
         </div>
       </section>
 
       {/* EMPTY STATE */}
       {recommendations.length === 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center py-20 text-gray-600"
-        >
-          <p className="text-lg font-semibold">
-            Nothing fits perfectly yet
+        <div className="reveal-rec text-center py-40 bg-black/5 border border-dashed border-black/10">
+          <h3 className="text-2xl font-display font-bold uppercase tracking-tighter">
+            System Recalibration Required
+          </h3>
+          <p className="mt-4 text-sm uppercase tracking-widest text-black/60 max-w-md mx-auto">
+            Adjust your identity parameters to view new architectural matches.
           </p>
-          <p className="mt-2 text-sm max-w-md mx-auto">
-            Try adjusting your occasion or preferences — I’ll rethink everything.
-          </p>
-        </motion.div>
+        </div>
       )}
 
       {/* DETAIL MODAL */}

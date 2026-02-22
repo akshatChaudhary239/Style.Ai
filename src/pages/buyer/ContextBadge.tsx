@@ -22,96 +22,71 @@ export default function ContextBadge({
     Object.keys(appliedContext).length > 0;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35 }}
-      className="
-        relative
-        rounded-2xl
-        border
-        bg-gradient-to-r
-        from-blue-50
-        to-sky-50
-        p-4 sm:p-5
-        shadow-md
-      "
-    >
-      {/* Glow */}
-      <div className="absolute -inset-1 rounded-2xl bg-blue-200/30 blur-xl -z-10" />
+    <div className="relative border-l-4 border-black bg-white p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 transition-all duration-500">
+      <div className="flex items-start gap-4">
+        <div className="flex-shrink-0 w-10 h-10 border border-black flex items-center justify-center text-xs font-bold uppercase tracking-widest">
+          {isDirty ? "AI" : "OK"}
+        </div>
 
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        {/* Context Text */}
-        <div className="flex items-start gap-3 text-sm">
-          <span className="text-lg">
-            {isDirty ? "🧠" : "✨"}
-          </span>
-
+        <div className="space-y-1">
+          <p className="text-[10px] uppercase tracking-[0.3em] text-black/40 font-display">System Context</p>
           <AnimatePresence mode="wait">
             {!hasAppliedContext && !isDirty && (
-              <motion.span
+              <motion.p
                 key="profile"
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className="text-gray-700"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 10 }}
+                className="text-lg font-display font-medium uppercase tracking-tighter"
               >
-                Based on your <strong>profile preferences</strong>
-              </motion.span>
+                Profile Archetype Activated
+              </motion.p>
             )}
 
             {hasAppliedContext && !isDirty && (
-              <motion.span
+              <motion.p
                 key="applied"
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className="text-gray-700"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 10 }}
+                className="text-lg font-display font-medium uppercase tracking-tighter"
               >
-                Showing results for{" "}
-                <strong className="text-gray-900">
-                  {appliedContext.occasion}
-                </strong>
-              </motion.span>
+                Optimized for: <span className="text-black font-black">{appliedContext.occasion}</span>
+              </motion.p>
             )}
 
             {isDirty && (
-              <motion.span
+              <motion.p
                 key="dirty"
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className="text-amber-700"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 10 }}
+                className="text-lg font-display font-medium uppercase tracking-tighter text-black/80"
               >
-                New context selected:{" "}
-                <strong>{draftContext.occasion}</strong>
-              </motion.span>
+                Drafting New Identity: <span className="font-black italic">{draftContext.occasion}</span>
+              </motion.p>
             )}
           </AnimatePresence>
         </div>
-
-        {/* Actions */}
-        <div className="flex gap-2">
-          {isDirty ? (
-            <Button
-              size="sm"
-              onClick={onApply}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              Apply changes
-            </Button>
-          ) : (
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={onEdit}
-              className="border-blue-200 text-blue-700 hover:bg-blue-50"
-            >
-              Change
-            </Button>
-          )}
-        </div>
       </div>
-    </motion.div>
+
+      <div className="flex gap-4">
+        {isDirty ? (
+          <button
+            onClick={onApply}
+            className="px-8 py-3 bg-black text-white text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-black/90 transition-all duration-300 transform hover:translate-y-[-2px] active:translate-y-0"
+          >
+            Update Engine
+          </button>
+        ) : (
+          <button
+            onClick={onEdit}
+            className="px-8 py-3 border border-black text-black text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-black hover:text-white transition-all duration-300 transform hover:translate-y-[-2px] active:translate-y-0"
+          >
+            Refine Intent
+          </button>
+        )}
+      </div>
+    </div>
   );
 }

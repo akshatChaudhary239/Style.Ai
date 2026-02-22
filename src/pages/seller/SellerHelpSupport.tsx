@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import gsap from "gsap";
 
 const SELLER_FAQS = [
   {
@@ -31,38 +32,49 @@ const SELLER_FAQS = [
 export default function SellerHelpSupport() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [message, setMessage] = useState("");
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(".reveal-support", {
+        y: 20,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: "power3.out"
+      });
+    }, containerRef);
+    return () => ctx.revert();
+  }, []);
 
   function handleSubmit() {
     if (!message.trim()) return;
-
     window.location.href = `mailto:seller-support@styleai.app?subject=Style.AI Seller Support&body=${encodeURIComponent(
       message
     )}`;
-
     setMessage("");
   }
 
   return (
-    <div className="w-full max-w-3xl space-y-10">
+    <div ref={containerRef} className="max-w-4xl space-y-24">
       {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <h1 className="text-2xl font-semibold text-gray-900">
-          Seller Help & Support
+      <section className="reveal-support space-y-6">
+        <p className="text-[10px] uppercase tracking-[0.4em] text-black/40 font-display font-bold">Internal Protocol / Assistance</p>
+        <h1 className="text-7xl md:text-8xl font-display font-black tracking-tighter uppercase leading-[0.8] text-black">
+          Business <br />
+          <span className="text-black/10">Assistance</span>
         </h1>
-        <p className="text-gray-600 mt-2 text-sm">
-          Everything you need to know to start selling confidently on Style.AI.
+        <p className="text-xl text-black/60 font-light leading-relaxed max-w-2xl">
+          Technical and operational documentation for the Style.AI seller ecosystem.
         </p>
-      </motion.div>
+      </section>
 
-      {/* How it works */}
-      <section className="rounded-xl border bg-white p-5 space-y-3">
-        <h2 className="font-semibold text-gray-900">
-          How selling on Style.AI works
+      {/* Overview */}
+      <section className="reveal-support bg-black text-white p-12 space-y-4">
+        <h2 className="text-[10px] font-black tracking-[0.4em] uppercase text-white/40">
+          Operational Logic
         </h2>
-        <p className="text-sm text-gray-600 leading-relaxed">
+        <p className="text-lg font-light leading-relaxed opacity-80">
           Style.AI helps sellers reach the right buyers using intelligent recommendations.
           You control what products are live using a slot-based system, and only active
           products are shown to buyers. Drafts allow you to prepare listings without
@@ -71,61 +83,69 @@ export default function SellerHelpSupport() {
       </section>
 
       {/* FAQs */}
-      <section className="space-y-4">
-        <h2 className="font-semibold text-gray-900">
-          Frequently asked questions
-        </h2>
+      <section className="reveal-support space-y-12">
+        <div className="border-b border-black pb-4">
+          <h2 className="text-2xl font-display font-bold uppercase tracking-tighter">
+            Frequent Inquiries
+          </h2>
+        </div>
 
-        <div className="space-y-2">
+        <div className="space-y-4">
           {SELLER_FAQS.map((faq, i) => (
-            <div
-              key={i}
-              className="border rounded-lg bg-white"
-            >
+            <div key={i} className="border border-black/5 group">
               <button
-                onClick={() =>
-                  setOpenIndex(openIndex === i ? null : i)
-                }
-                className="w-full flex justify-between items-center px-4 py-3 text-left text-sm font-medium"
+                onClick={() => setOpenIndex(openIndex === i ? null : i)}
+                className="w-full flex justify-between items-center px-10 py-8 text-left transition-colors hover:bg-black/5"
               >
-                {faq.q}
-                <span className="text-gray-400">
-                  {openIndex === i ? "−" : "+"}
+                <span className="text-[10px] font-black tracking-widest uppercase">{faq.q}</span>
+                <span className={`text-lg transition-transform duration-300 ${openIndex === i ? 'rotate-45' : ''}`}>
+                  +
                 </span>
               </button>
 
-              {openIndex === i && (
-                <div className="px-4 pb-3 text-sm text-gray-600">
-                  {faq.a}
-                </div>
-              )}
+              <AnimatePresence>
+                {openIndex === i && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-10 pb-10 text-sm font-light leading-relaxed text-black/60">
+                      {faq.a}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Contact Box */}
-      <section className="rounded-xl border bg-white p-5 space-y-4">
-        <h2 className="font-semibold text-gray-900">
-          Need seller support?
-        </h2>
-        <p className="text-sm text-gray-600">
-          Facing an issue with products, slots, or publishing? Tell us what’s wrong.
-        </p>
+      {/* Ticket Creation */}
+      <section className="reveal-support space-y-12 pb-20">
+        <div className="border-b border-black pb-4">
+          <h2 className="text-2xl font-display font-bold uppercase tracking-tighter">
+            Manual Intervention
+          </h2>
+        </div>
 
-        <textarea
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Describe your issue here..."
-          className="w-full min-h-[120px] border rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-        />
+        <div className="space-y-8">
+          <p className="text-[10px] font-black tracking-[0.3em] uppercase text-black/40">Open Support Ticket</p>
+          <textarea
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="DESCRIBE OPERATIONAL DISRUPTION..."
+            className="w-full min-h-[200px] bg-gray-50 border-none p-8 text-xs font-black tracking-widest uppercase focus:ring-1 focus:ring-black outline-none placeholder:text-black/10 resize-none"
+          />
 
-        <button
-          onClick={handleSubmit}
-          className="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-700 transition"
-        >
-          Send message
-        </button>
+          <button
+            onClick={handleSubmit}
+            className="px-12 py-5 bg-black text-white text-[10px] font-black tracking-[0.4em] uppercase hover:bg-black/90 transition-all active:scale-95"
+          >
+            Initialize Request
+          </button>
+        </div>
       </section>
     </div>
   );
