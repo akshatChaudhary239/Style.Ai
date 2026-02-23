@@ -47,7 +47,7 @@ function BuyerLayoutInner() {
           {/* Navigation */}
           <nav className="flex flex-col gap-6 flex-1">
             <NavItem to="/buyer" label="Overview" end />
-            <NavItem to="/buyer/recommendations" label="Insights" />
+            <NavItem to="/buyer/recommendations" label="Insightss" />
             <NavItem to="/buyer/liked" label="Favorites" />
             <NavItem to="/buyer/Profile" label="Identity" />
             <NavItem to="/buyer/Help" label="Assistance" />
