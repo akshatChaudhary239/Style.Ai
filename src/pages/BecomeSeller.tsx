@@ -7,10 +7,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { becomeSeller } from "@/lib/seller-api";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
+import { syncUserRoleAndSession } from "@/lib/auth-sync";
+import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 export default function BecomeSeller() {
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
@@ -27,34 +29,33 @@ export default function BecomeSeller() {
     try {
       setLoading(true);
 
+      // 1. Call the RPC to create the seller record
       await becomeSeller({
         store_name: storeName,
         business_type: businessType,
         location,
       });
 
+      // 2. Sync the session and fetch latest profile (this verifies role change in DB)
+      const result = await syncUserRoleAndSession();
+
+      // 3. Update global auth state so UI reacts immediately
+      await refreshUser();
 
       toast({
-        title: "Seller account created ✔",
-        description: "Welcome to the seller dashboard",
+        title: "Seller account created",
+        description: "Welcome to your shop dashboard",
       });
-      await supabase
-  .from("user_profiles")
-  .update({ active_role: "seller" })
-  .eq("id", user.id);
 
+      // 4. Navigate to the dashboard or destination determined by sync
+      navigate(result?.destination || "/seller/dashboard", { replace: true });
 
-      navigate("/seller/dashboard", { replace: true });
-
-    } catch (err: unknown) {
-  const message =
-    err instanceof Error ? err.message : "Something went wrong";
-
-  toast({
-    title: "Error",
-    description: message,
-    variant: "destructive",
-  });
+    } catch (err: any) {
+      toast({
+        title: "Submission failed",
+        description: err.message || "Could not create seller profile",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }

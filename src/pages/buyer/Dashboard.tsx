@@ -1,15 +1,41 @@
 import AppNavbar from "@/components/AppNavbar";
-import { Outlet, NavLink } from "react-router-dom";
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { StyleContextProvider } from "@/context/StyleContext";
 import { useRef, useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import gsap from "gsap";
 
 function BuyerLayoutInner() {
+  const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const sidebarRef = useRef(null);
   const contentRef = useRef(null);
 
   useEffect(() => {
+    if (authLoading) return;
+    if (!user) {
+      navigate("/auth", { replace: true });
+      return;
+    }
+
+    async function checkBuyer() {
+      const { data: profile } = await supabase
+        .from("user_profiles")
+        .select("active_role")
+        .eq("id", user.id)
+        .single();
+
+      if (profile?.active_role === "seller") {
+        navigate("/seller/dashboard", { replace: true });
+      } else if (!profile?.active_role) {
+        navigate("/choose-role", { replace: true });
+      }
+    }
+
+    checkBuyer();
+
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
     tl.from(sidebarRef.current, {
@@ -22,7 +48,7 @@ function BuyerLayoutInner() {
         opacity: 0,
         duration: 0.8,
       }, "-=0.6");
-  }, []);
+  }, [user, authLoading, navigate]);
 
   return (
     <div className="min-h-screen bg-white text-black font-body selection:bg-black selection:text-white">

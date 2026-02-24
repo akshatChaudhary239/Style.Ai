@@ -9,6 +9,7 @@ interface AuthContextType {
   signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -17,6 +18,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const refreshUser = async () => {
+    setLoading(true);
+    const { data } = await supabase.auth.getSession();
+    setSession(data.session);
+    setUser(data.session?.user ?? null);
+    setLoading(false);
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -35,10 +44,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!mounted) return;
 
-      setLoading(true);              // 🔥 IMPORTANT
       setSession(session);
       setUser(session?.user ?? null);
-      setLoading(false);             // 🔥 IMPORTANT
+      setLoading(false);
     });
 
     return () => {
@@ -63,7 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, session, loading, signUp, signIn, signOut }}
+      value={{ user, session, loading, signUp, signIn, signOut, refreshUser }}
     >
       {children}
     </AuthContext.Provider>

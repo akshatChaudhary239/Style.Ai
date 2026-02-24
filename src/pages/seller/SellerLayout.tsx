@@ -38,7 +38,8 @@ export default function SellerLayout() {
       }
 
       if (profile.active_role !== "seller") {
-        navigate("/", { replace: true });
+        // Correctly redirect to the buyer portal if that's the new active role
+        navigate(profile.active_role === "buyer" ? "/buyer" : "/", { replace: true });
         return;
       }
 
@@ -46,10 +47,11 @@ export default function SellerLayout() {
         .from("seller_profile")
         .select("store_name")
         .eq("id", user.id)
-        .single();
+        .maybeSingle();
 
       if (sellerError || !seller) {
-        navigate("/", { replace: true });
+        // Redirect to onboarding instead of landing page to prevent loop
+        navigate("/become-seller", { replace: true });
         return;
       }
 

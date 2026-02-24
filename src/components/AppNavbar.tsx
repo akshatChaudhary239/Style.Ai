@@ -13,12 +13,11 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-
-type Role = "buyer" | "seller";
+import { syncUserRoleAndSession, type Role } from "@/lib/auth-sync";
 
 export default function AppNavbar() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const [activeRole, setActiveRole] = useState<Role | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -31,7 +30,7 @@ export default function AppNavbar() {
       .single();
 
     if (!error && (data?.active_role === "buyer" || data?.active_role === "seller")) {
-      setActiveRole(data.active_role);
+      setActiveRole(data.active_role as Role);
     }
   }, [user]);
 
@@ -46,19 +45,33 @@ export default function AppNavbar() {
   async function switchRole() {
     if (!user || !activeRole) return;
     setLoading(true);
-    const newRole: Role = activeRole === "seller" ? "buyer" : "seller";
-    const { error } = await supabase
-      .from("user_profiles")
-      .update({ active_role: newRole })
-      .eq("id", user.id);
+    try {
+      const newRole: Role = activeRole === "seller" ? "buyer" : "seller";
 
-    if (!error) {
-      setActiveRole(newRole);
-      navigate(newRole === "seller" ? "/seller/dashboard" : "/buyer", {
-        replace: true,
-      });
+      // 1. Update the database
+      const { error } = await supabase
+        .from("user_profiles")
+        .update({ active_role: newRole })
+        .eq("id", user.id);
+
+      if (error) throw error;
+
+      // 2. Sync session and profile state
+      const result = await syncUserRoleAndSession();
+
+      // 3. Update global auth context
+      await refreshUser();
+
+      if (result) {
+        navigate(result.destination, { replace: true });
+      } else {
+        navigate(newRole === "seller" ? "/become-seller" : "/buyer", { replace: true });
+      }
+    } catch (error: any) {
+      console.error("Role switch failed:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   async function logout() {
